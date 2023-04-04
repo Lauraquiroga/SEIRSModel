@@ -1,11 +1,10 @@
 import numpy as np
-import random
 from .network import Network
 
 class SEIRS_Model:
     # ------------------ Model definition and initialization -------------------
     def __init__(self, network: Network, iterations: int, **rates) -> None:
-        # network:= 
+        # network:= Network object -> Information of devices and connections
         self.network = network
 
         # rates := probabilities to change of state
