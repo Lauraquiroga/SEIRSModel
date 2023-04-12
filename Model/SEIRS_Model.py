@@ -7,7 +7,7 @@ class SEIRS_Model:
         # network:= Network object -> Information of devices and connections
         self.network = network
 
-        # rates := probabilities to change of state
+        # rates := probabilities to change of state {alpha, beta, delta, gamma}
         self.parameters = rates
 
         # n_times:= number of time-steps considered
@@ -21,7 +21,7 @@ class SEIRS_Model:
         self.w = np.zeros((self.n, iterations))
         self.y = np.zeros((self.n, iterations))
         self.z = np.zeros((self.n, iterations))
-        # !!!!!!!!!!!!!por ahora lo voy a inicializar en un nodo cualquiera
+        # !!!!!!!!!!!!!por ahora lo voy a inicializar en un nodo cualquiera!!!!!!!!!!!!!!!!!!!!!!!!
         self.x[3,0] = 0
         self.y[3, 0] = 1  # 4th node has the virus initially
 
