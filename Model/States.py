@@ -5,4 +5,3 @@ class States(Enum):
     E = 1 # Exposed
     I = 2 # Infected
     R = 3 # Recovered
-    D = 4 # Deceased
