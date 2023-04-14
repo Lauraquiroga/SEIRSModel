@@ -1,7 +1,7 @@
 import tkinter as tk
 from window_file_name import FileNameWindow
 
-class InitialWindow:
+class InterfaceSEIRS:
     def __init__(self, win):
         self.win = win
 
@@ -21,28 +21,34 @@ class InitialWindow:
         self.btn_start.place(x=130, y=140)
 
     def init_network(self):
-        self.win.destroy() # close the current window
-        self.win = tk.Tk() # create another Tk instance
+        child_win = tk.Toplevel(self.win)
 
         if self.load_mode.get()==1:
-            file_win= FileNameWindow(self.win)
+            file_win= FileNameWindow(child_win, self)
             self.win.mainloop
 
         elif self.load_mode.get()==2:
-            pass
+            file_win= FileNameWindow(child_win, self)
+            self.win.mainloop
+
         else:
             pass
         
-        print(self.load_mode.get())
         
-        
+    def create_network(self, file_name="", net_size=0):
+        if self.load_mode.get()==1:
+            print(file_name+"1")
+        elif self.load_mode.get()==2:
+            print(file_name+"2")
+        else:
+            print("red aleatoria...")
 
 def main(): 
     root = tk.Tk()
     root.title("SEIRS Model")
     root.geometry("370x200")
     root.resizable(0,0)
-    InitialWindow(root)
+    InterfaceSEIRS(root)
     root.mainloop()
 
 if __name__ == '__main__':

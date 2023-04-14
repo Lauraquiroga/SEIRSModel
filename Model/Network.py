@@ -4,31 +4,31 @@ import networkx as nx
 from .states import States
 
 class Network:
-    """
-    def __init__(self, adjMatrix: np.array, init_states: list) -> None:
-        # n:= number of nodes in the network
-        self.n = len(adjMatrix)
-        # adjMatrix := adjacency matrix representing connection between nodes
-            # adjMatrix[i][j] = 1 , i and j are neighbours
-            # adjMatrix[i][j] = 0 , i and j are not neighbours
-        self.adjMatrix = adjMatrix
 
-        # graph:= graph that represents the network (created from adjMatrix)
-        self.graph = nx.Graph(adjMatrix)
-        
-    """
     def __init__(self, mode:int, file_name:str="", net_size:int=0) -> None:
-        self.init_states = np.zeros((4,self.n), dtype=float)
+        """
+        n:= number of nodes in the network
+        adjMatrix := adjacency matrix representing connection between nodes
+            adjMatrix[i][j] = 1 , i and j are neighbours
+            adjMatrix[i][j] = 0 , i and j are not neighbours
+        graph:= graph that represents the network (created from adjMatrix)
+        init_states = the initial probabilities for every node for every state
+        """
 
-        if mode==0:
+        self.init_states = np.zeros((4,self.n), dtype=float)
+        # mode:= the modality to initialize the network
+        if mode==1:
             self.load_from_json_prob(self, file_name)
-        elif mode==1:
+        elif mode==2:
             self.load_struc_from_json(self, file_name)
         else:
             self.generate_random(self, net_size)
 
 
     def load_from_json_prob(self, file_name):
+        """
+        Load network from json file including initial probabilities
+        """
         with open(file_name) as json_file:
             data = json.load(json_file)
             self.n = len(data)
@@ -45,6 +45,9 @@ class Network:
                 self.init_states[States.R.value][node]=data[node]['R']
 
     def load_struc_from_json(self, file_name):
+        """
+        Load network from json file not including initial probabilities
+        """
         with open(file_name) as json_file:
             data = json.load(json_file)
             self.n = len(data)
@@ -73,11 +76,11 @@ class Network:
                 neighbour= np.random.randint(i+1, self.n)
                 self.adjMatrix[i,neighbour]=1
                 self.adjMatrix[neighbour, i]=1
-                
+        self.graph = nx.Graph(self.adjMatrix)
+
     def initialize_probs(self, infected_node):
         """
-        Initialize the probabilities to be in every state
-        for each of the nodes
+        Initialize the probabilities for each of the nodes for each compartment
         infected_node: node where the infection starts
         """
         self.init_states[States.S.value]=np.ones(self.n, dtype=float)

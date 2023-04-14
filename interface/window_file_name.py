@@ -1,7 +1,8 @@
 import tkinter as tk
 
 class FileNameWindow:
-    def __init__(self, win):
+    def __init__(self, win, master):
+        self.master=master
         self.win = win
         self.win.title('File name')
         self.win.geometry("400x150")
@@ -14,11 +15,17 @@ class FileNameWindow:
                    height = 1,
                    width = 45)
         self.inputtxt_file.place(x=20, y=50)
-        btn = tk.Button(self.win,
+        btn_enter = tk.Button(self.win,
                         text = "Enter", 
-                        command = self.test)
-        btn.place(x=180, y=80)
-        self.file_name=""
+                        command = self.set_file_name)
+        btn_enter.place(x=150, y=80)
 
-    def test(self):
-        self.file_name=self.inputtxt_file.get(1.0, "end-1c")
+        btn_cancel = tk.Button(self.win,
+                        text = "Cancel", 
+                        command = self.win.destroy)
+        btn_cancel.place(x=200, y=80)
+
+
+    def set_file_name(self):
+        self.master.create_network(file_name=self.inputtxt_file.get(1.0, "end-1c"))
+        self.win.destroy()
