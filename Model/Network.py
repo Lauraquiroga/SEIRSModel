@@ -59,16 +59,21 @@ class Network:
         Generate random adjacency matrix making sure it creates a connected graph
         """
         self.n = net_size
-        self.adjMatrix = np.zeros((self.n,self.n), dtype = int)
-
-        #########Actually generate
-
-    def generate_positions(self):
-        """
-        Generate node positions for graphic display
-        """
-        pass
-
+        self.adjMatrix = np.random.randint(2, size=(self.n, self.n))
+        for i in range(self.n):
+            is_connected=False
+            for j in range(i,self.n):
+                if i==j:
+                    self.adjMatrix[i,j]=0
+                else:
+                    self.adjMatrix[i,j]=self.adjMatrix[j,i]
+                if self.adjMatrix[i,j]==1:
+                    is_connected=True
+            if not is_connected:
+                neighbour= np.random.randint(i+1, self.n)
+                self.adjMatrix[i,neighbour]=1
+                self.adjMatrix[neighbour, i]=1
+                
     def initialize_probs(self, infected_node):
         """
         Initialize the probabilities to be in every state
