@@ -1,30 +1,46 @@
 import tkinter as tk
+from window_file_name import FileNameWindow
 
 class InitialWindow:
     def __init__(self, win):
         self.win = win
-        self.lbl_init_network = tk.Label(win, text='Select how to initialize the network')
-        self.lbl_init_network.place()
-        self.btn_load_prob = tk.Button(win, text='Load network with initial probabilities from file', command=self.load_file_prob)
-        self.btn_load_noprob = tk.Button(win, text='Load network structure from file (no initial probabilities)', command=self.load_file_noprob)
-        self.btn_generate_new = tk.Button(win, text='Generate new random network', command=self.generate_network)
-        self.btn_load_prob.place()
-        self.btn_load_noprob.place()
-        self.btn_generate_new.place()
 
-    def load_file_prob(self):
-        print(1)
+        self.lbl_init_network = tk.Label(win, text='Select how to initialize the network:')
+        self.lbl_init_network.place(x=20, y=20)
 
-    def load_file_noprob(self):
-        print(2)
+        self.load_mode = tk.IntVar()
+        self.load_mode.set(1)
+        self.rdbtn_load_prob = tk.Radiobutton(win, text='Load network with initial probabilities from file', variable=self.load_mode, value=1)
+        self.rdbtn_load_noprob = tk.Radiobutton(win, text='Load network structure from file (no initial probabilities)', variable=self.load_mode, value=2)
+        self.rdbtn_generate_new = tk.Radiobutton(win, text='Generate new random network', variable=self.load_mode, value=3)
+        self.rdbtn_load_prob.place(x=20, y=50)
+        self.rdbtn_load_noprob.place(x=20, y=70)
+        self.rdbtn_generate_new.place(x=20, y=90)
 
-    def generate_network(self):
-        print(3)
+        self.btn_start = tk.Button(text='Initialize network', command=self.init_network, bg='black', fg='white')
+        self.btn_start.place(x=130, y=140)
+
+    def init_network(self):
+        self.win.destroy() # close the current window
+        self.win = tk.Tk() # create another Tk instance
+
+        if self.load_mode.get()==1:
+            file_win= FileNameWindow(self.win)
+            self.win.mainloop
+
+        elif self.load_mode.get()==2:
+            pass
+        else:
+            pass
+        
+        print(self.load_mode.get())
+        
+        
 
 def main(): 
     root = tk.Tk()
     root.title("SEIRS Model")
-    root.geometry("350x350")
+    root.geometry("370x200")
     root.resizable(0,0)
     InitialWindow(root)
     root.mainloop()

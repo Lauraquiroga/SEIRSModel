@@ -1,8 +1,10 @@
 import numpy as np
+import json
 import networkx as nx
 from .states import States
 
 class Network:
+    """
     def __init__(self, adjMatrix: np.array, init_states: list) -> None:
         # n:= number of nodes in the network
         self.n = len(adjMatrix)
@@ -14,9 +16,20 @@ class Network:
         # graph:= graph that represents the network (created from adjMatrix)
         self.graph = nx.Graph(adjMatrix)
         
+    """
+    def __init__(self, mode:int, file_name:str="", net_size:int=0) -> None:
+        if mode==0:
+            self.load_from_json_prob(self, file_name)
+        elif mode==1:
+            self.load_struc_from_json(self, file_name)
+        else:
+            self.generate_random(self, net_size)
 
-        """
-        # initialize states
-        for node in range(self.n):
-            nx.set_node_attributes(self.graph, init_states[node], 'state')
-        """
+    def load_from_json_prob(self, file_name):
+        pass
+
+    def load_struc_from_json(self, file_name):
+        pass
+
+    def generate_random(self, net_size):
+        pass
