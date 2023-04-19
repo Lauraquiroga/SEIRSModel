@@ -12,10 +12,10 @@ class NetSizeWindow:
         self.lbl_init_network = tk.Label(win, text='Enter the number of devices in the network:')
         self.lbl_init_network.place(x=20, y=20)
         
-        self.inputtxt_file = tk.Text(self.win,
+        self.inputtxt_n = tk.Text(self.win,
                    height = 1,
                    width = 32)
-        self.inputtxt_file.place(x=20, y=50)
+        self.inputtxt_n.place(x=20, y=50)
 
         self.btn_enter = tk.Button(self.win,
                         text = "Enter", 
@@ -29,9 +29,9 @@ class NetSizeWindow:
 
 
     def set_size(self):
-        n = self.inputtxt_file.get(1.0, "end-1c")
+        n = self.inputtxt_n.get(1.0, "end-1c")
         if (n.isdigit()):
             self.master.create_network(net_size=int(n))
             self.win.destroy()
         else:
-            messagebox.showerror(message="The netwrok size must be an integer ", title="")
+            messagebox.showerror(message="The netwrok size must be an integer")
