@@ -1,5 +1,7 @@
 import tkinter as tk
 from window_file_name import FileNameWindow
+from window_n_net import NetSizeWindow
+from model.network import Network
 
 class InterfaceSEIRS:
     def __init__(self, win):
@@ -23,25 +25,19 @@ class InterfaceSEIRS:
     def init_network(self):
         child_win = tk.Toplevel(self.win)
 
-        if self.load_mode.get()==1:
-            file_win= FileNameWindow(child_win, self)
-            self.win.mainloop
-
-        elif self.load_mode.get()==2:
+        if self.load_mode.get()!=3:
             file_win= FileNameWindow(child_win, self)
             self.win.mainloop
 
         else:
-            pass
-        
+            file_win= NetSizeWindow(child_win, self)
+            self.win.mainloop
         
     def create_network(self, file_name="", net_size=0):
-        if self.load_mode.get()==1:
-            print(file_name+"1")
-        elif self.load_mode.get()==2:
-            print(file_name+"2")
+        if self.load_mode.get()!=3:
+            Network(self.load_mode.get(), file_name=file_name)
         else:
-            print("red aleatoria...")
+            Network(self.load_mode.get(), net_size=net_size)
 
 def main(): 
     root = tk.Tk()

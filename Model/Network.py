@@ -14,15 +14,13 @@ class Network:
         graph:= graph that represents the network (created from adjMatrix)
         init_states = the initial probabilities for every node for every state
         """
-
-        self.init_states = np.zeros((4,self.n), dtype=float)
         # mode:= the modality to initialize the network
         if mode==1:
-            self.load_from_json_prob(self, file_name)
+            self.load_from_json_prob(file_name)
         elif mode==2:
-            self.load_struc_from_json(self, file_name)
+            self.load_struc_from_json(file_name)
         else:
-            self.generate_random(self, net_size)
+            self.generate_random(net_size)
 
 
     def load_from_json_prob(self, file_name):
@@ -38,6 +36,7 @@ class Network:
             # graph:= graph that represents the network (created from adjMatrix)
             self.graph = nx.Graph(self.adjMatrix)
             # initialize probabilities
+            self.init_states = np.zeros((4,self.n), dtype=float)
             for node in range(self.n):
                 self.init_states[States.S.value][node]=data[node]['S']
                 self.init_states[States.E.value][node]=data[node]['E']
@@ -56,12 +55,14 @@ class Network:
                 self.adjMatrix[i,:] = data[i]['adjList']
             # graph:= graph that represents the network (created from adjMatrix)
             self.graph = nx.Graph(self.adjMatrix)
+            self.init_states = np.zeros((4,self.n), dtype=float)
 
     def generate_random(self, net_size):
         """
         Generate random adjacency matrix making sure it creates a connected graph
         """
         self.n = net_size
+        self.init_states = np.zeros((4,self.n), dtype=float)
         self.adjMatrix = np.random.randint(2, size=(self.n, self.n))
         for i in range(self.n):
             is_connected=False
@@ -72,7 +73,7 @@ class Network:
                     self.adjMatrix[i,j]=self.adjMatrix[j,i]
                 if self.adjMatrix[i,j]==1:
                     is_connected=True
-            if not is_connected:
+            if not is_connected and i+1<self.n:
                 neighbour= np.random.randint(i+1, self.n)
                 self.adjMatrix[i,neighbour]=1
                 self.adjMatrix[neighbour, i]=1
