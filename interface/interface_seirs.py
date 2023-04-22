@@ -1,6 +1,7 @@
 import tkinter as tk
 from window_file_name import FileNameWindow
 from window_n_net import NetSizeWindow
+from window_params import ModelParamsWindow
 from model.network import Network
 
 class InterfaceSEIRS:
@@ -38,6 +39,14 @@ class InterfaceSEIRS:
             Network(self.load_mode.get(), file_name=file_name)
         else:
             Network(self.load_mode.get(), net_size=net_size)
+    
+    def init_params(self):
+        child_win = tk.Toplevel(self.win)
+        file_win= ModelParamsWindow(child_win, self)
+        self.win.mainloop
+
+    def run_model(self, alpha, beta, delta, gamma):
+        print(alpha, beta, delta, gamma)
 
 def main(): 
     root = tk.Tk()

@@ -33,5 +33,6 @@ class NetSizeWindow:
         if (n.isdigit()):
             self.master.create_network(net_size=int(n))
             self.win.destroy()
+            self.master.init_params()
         else:
             messagebox.showerror(message="The netwrok size must be an integer")
