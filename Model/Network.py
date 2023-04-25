@@ -27,21 +27,24 @@ class Network:
         """
         Load network from json file including initial probabilities
         """
-        with open(file_name) as json_file:
-            data = json.load(json_file)
-            self.n = len(data)
-            self.adjMatrix = np.zeros((self.n,self.n), dtype = int)
-            for i in range(self.n):
-                self.adjMatrix[i,:] = data[i]['adjList']
-            # graph:= graph that represents the network (created from adjMatrix)
-            self.graph = nx.Graph(self.adjMatrix)
-            # initialize probabilities
-            self.init_states = np.zeros((4,self.n), dtype=float)
-            for node in range(self.n):
-                self.init_states[States.S.value][node]=data[node]['S']
-                self.init_states[States.E.value][node]=data[node]['E']
-                self.init_states[States.I.value][node]=data[node]['I']
-                self.init_states[States.R.value][node]=data[node]['R']
+        try:
+            with open(file_name) as json_file:
+                data = json.load(json_file)
+                self.n = len(data)
+                self.adjMatrix = np.zeros((self.n,self.n), dtype = int)
+                for i in range(self.n):
+                    self.adjMatrix[i,:] = data[i]['adjList']
+                # graph:= graph that represents the network (created from adjMatrix)
+                self.graph = nx.Graph(self.adjMatrix)
+                # initialize probabilities
+                self.init_states = np.zeros((4,self.n), dtype=float)
+                for node in range(self.n):
+                    self.init_states[States.S.value][node]=data[node]['S']
+                    self.init_states[States.E.value][node]=data[node]['E']
+                    self.init_states[States.I.value][node]=data[node]['I']
+                    self.init_states[States.R.value][node]=data[node]['R']
+        except FileNotFoundError as fnf:
+            raise FileNotFoundError(str(fnf))
 
     def load_struc_from_json(self, file_name):
         """

@@ -63,8 +63,16 @@ class ModelParamsWindow:
                 delta = float(delta)
                 gamma = float(gamma)
 
+                if alpha<0 or beta<0 or delta<0 or gamma<0:
+                     raise ValueError("All values must be positive")
+                elif alpha>1 or beta>1 or delta>1 or gamma>1:
+                     raise ValueError("All values must be between 0 and 1")
+                
                 self.master.run_model(alpha, beta, delta, gamma)
                 self.win.destroy()
                 
-        except ValueError:
-            messagebox.showerror(message="The model parameters must be a numeric type")
+        except ValueError as e:
+            if (str(e).split()[0]!="All"):
+                messagebox.showerror(message="All values must be a numeric type")
+            else:
+                messagebox.showerror(message=e)

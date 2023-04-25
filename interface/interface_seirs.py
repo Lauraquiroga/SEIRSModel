@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import messagebox
 from window_file_name import FileNameWindow
 from window_n_net import NetSizeWindow
 from window_params import ModelParamsWindow
@@ -36,7 +37,11 @@ class InterfaceSEIRS:
         
     def create_network(self, file_name="", net_size=0):
         if self.load_mode.get()!=3:
-            Network(self.load_mode.get(), file_name=file_name)
+            try:
+                Network(self.load_mode.get(), file_name=file_name)
+            except FileNotFoundError as e:
+                mess = str(e).split('] ', 1)[1]
+                messagebox.showerror(message=mess)
         else:
             Network(self.load_mode.get(), net_size=net_size)
     
