@@ -3,10 +3,11 @@ from .network import Network
 
 class SEIRS_Model:
     # ------------------ Model definition and initialization -------------------
-    def __init__(self, network: Network, iterations: int, **rates) -> None:
+    def __init__(self, network: Network, iterations: int, rates:dict) -> None:
         # network:= Network object -> Information of devices and connections
         self.network = network
-
+        self.n = self.network.n
+        
         # rates := probabilities to change of state {alpha, beta, delta, gamma}
         self.parameters = rates
 

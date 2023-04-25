@@ -4,6 +4,7 @@ from window_file_name import FileNameWindow
 from window_n_net import NetSizeWindow
 from window_params import ModelParamsWindow
 from model.network import Network
+from model.seirs_model import SEIRS_Model
 
 class InterfaceSEIRS:
     def __init__(self, win):
@@ -28,30 +29,33 @@ class InterfaceSEIRS:
         child_win = tk.Toplevel(self.win)
 
         if self.load_mode.get()!=3:
-            file_win= FileNameWindow(child_win, self)
+            FileNameWindow(child_win, self)
             self.win.mainloop
 
         else:
-            file_win= NetSizeWindow(child_win, self)
+            NetSizeWindow(child_win, self)
             self.win.mainloop
         
     def create_network(self, file_name="", net_size=0):
         if self.load_mode.get()!=3:
             try:
-                Network(self.load_mode.get(), file_name=file_name)
+                self.network = Network(self.load_mode.get(), file_name=file_name)
             except FileNotFoundError as e:
                 mess = str(e).split('] ', 1)[1]
                 messagebox.showerror(message=mess)
         else:
-            Network(self.load_mode.get(), net_size=net_size)
+            self.network = Network(self.load_mode.get(), net_size=net_size)
     
     def init_params(self):
         child_win = tk.Toplevel(self.win)
-        file_win= ModelParamsWindow(child_win, self)
+        ModelParamsWindow(child_win, self)
         self.win.mainloop
 
     def run_model(self, alpha, beta, delta, gamma):
-        print(alpha, beta, delta, gamma)
+        #rates:= dictionary with parameters
+        rates = {'alpha': alpha, 'beta':beta, 'delta':delta, 'gamma':gamma}
+        model = SEIRS_Model(self.network, 100, rates)
+        model.run_model()
 
 def main(): 
     root = tk.Tk()

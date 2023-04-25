@@ -50,15 +50,18 @@ class Network:
         """
         Load network from json file not including initial probabilities
         """
-        with open(file_name) as json_file:
-            data = json.load(json_file)
-            self.n = len(data)
-            self.adjMatrix = np.zeros((self.n,self.n), dtype = int)
-            for i in range(self.n):
-                self.adjMatrix[i,:] = data[i]['adjList']
-            # graph:= graph that represents the network (created from adjMatrix)
-            self.graph = nx.Graph(self.adjMatrix)
-            self.init_states = np.zeros((4,self.n), dtype=float)
+        try:
+            with open(file_name) as json_file:
+                data = json.load(json_file)
+                self.n = len(data)
+                self.adjMatrix = np.zeros((self.n,self.n), dtype = int)
+                for i in range(self.n):
+                    self.adjMatrix[i,:] = data[i]['adjList']
+                # graph:= graph that represents the network (created from adjMatrix)
+                self.graph = nx.Graph(self.adjMatrix)
+                self.init_states = np.zeros((4,self.n), dtype=float)
+        except FileNotFoundError as fnf:
+            raise FileNotFoundError(str(fnf))
 
     def generate_random(self, net_size):
         """
