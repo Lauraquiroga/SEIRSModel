@@ -122,10 +122,10 @@ class SEIRS_Model:
         Plot evolution of the whole network
         """
         fig = plt.figure(figsize=(8, 8))
-        plt.plot(self.t, self.totals[0, :], label='Susceptible')
-        plt.plot(self.t, self.totals[1, :], label='Exposed')
-        plt.plot(self.t, self.totals[2, :], label='Infected')
-        plt.plot(self.t, self.totals[3, :], label='Recovered')
+        plt.plot(self.t, self.totals[States.S.value, :], color=self.colour_key['S'], label='Susceptible')
+        plt.plot(self.t, self.totals[States.E.value, :], color=self.colour_key['E'], label='Exposed')
+        plt.plot(self.t, self.totals[States.I.value, :], color=self.colour_key['I'], label='Infected')
+        plt.plot(self.t, self.totals[States.R.value, :], color=self.colour_key['R'], label='Recovered')
         plt.ylabel('Number of devices')
         plt.xlabel('Time')
         plt.title(f"Evolution of total amount of devices per compartment")
