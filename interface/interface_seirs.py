@@ -3,6 +3,7 @@ from tkinter import messagebox
 from window_file_name import FileNameWindow
 from window_n_net import NetSizeWindow
 from window_params import ModelParamsWindow
+from window_results import ResultsWindow
 from model.network import Network
 from model.seirs_model import SEIRS_Model
 
@@ -54,8 +55,15 @@ class InterfaceSEIRS:
     def run_model(self, alpha, beta, delta, gamma):
         #rates:= dictionary with parameters
         rates = {'alpha': alpha, 'beta':beta, 'delta':delta, 'gamma':gamma}
-        model = SEIRS_Model(self.network, 100, rates)
+        #initialize and run the model
+        model = SEIRS_Model(self.network, 1000, rates)
         model.run_model()
+        self.show_results(model)
+
+    def show_results(self, model):
+        child_win = tk.Toplevel(self.win)
+        ResultsWindow(child_win, self, model)
+        self.win.mainloop
 
 def main(): 
     root = tk.Tk()

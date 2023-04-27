@@ -1,4 +1,5 @@
 import numpy as np
+from .states import States
 from .network import Network
 
 class SEIRS_Model:
@@ -9,10 +10,12 @@ class SEIRS_Model:
         self.n = self.network.n
         
         # rates := probabilities to change of state {alpha, beta, delta, gamma}
-        self.parameters = rates
+        self.rates = rates
 
         # n_times:= number of time-steps considered
         self.n_times = iterations
+        #resolution:= number of time-steps between one graph visualization and the other
+        self.resolution = 50
 
         # x := probability of being in the S state for every node
         # w := probability of being in the E state for every node
@@ -22,9 +25,16 @@ class SEIRS_Model:
         self.w = np.zeros((self.n, iterations))
         self.y = np.zeros((self.n, iterations))
         self.z = np.zeros((self.n, iterations))
+        # totals := total number of nodes on each compartment per iteration
+        self.totals = np.zeros((4,iterations))
+        # nodes_comp := list of {iterations/resolution} dictionaries containing the compartment of each node at {resolution}-spaced iterations
+        self.nodes_comp = []
+
         # !!!!!!!!!!!!!por ahora lo voy a inicializar en un nodo cualquiera!!!!!!!!!!!!!!!!!!!!!!!!
         self.x[3,0] = 0
         self.y[3, 0] = 1  # 4th node has the virus initially
+        self.totals[States.S.value,0]=self.n-1
+        self.totals[States.I.value,0]=1
 
     # ------------ Definition of the system of differential equations ------------
 
@@ -63,8 +73,14 @@ class SEIRS_Model:
         # The arrays are filled in the for loop following the formula
         # Numeric solution to the ODE using Euler's method
         for k in range(1, self.n_times):
+            visualization = False
+            if k%self.resolution==0:
+                visualization = True
+                comp_dict = dict() #Dictionary with each node's compartments
+
             t[k] = t[k - 1] + dt
             for i in range(self.network.n):
+                # Calculation of probabilities
                 self.w[i, k] = self.w[i, k - 1] + dt * self.w_prime( self.w[:, k - 1], self.y[:, k - 1],  self.z[:, k - 1], i)
                 self.y[i, k] = self.y[i, k - 1] + dt * self.y_prime( self.w[:, k - 1], self.y[:, k - 1],  i)
                 self.z[i, k] = self.z[i, k - 1] + dt * self.z_prime( self.y[:, k - 1], self.z[:, k - 1], i)
@@ -72,4 +88,13 @@ class SEIRS_Model:
                 if (self.x[i, k]<0):
                     self.x[i, k]=0
 
-        
+                # Highest probability -> Current compartment
+                probabilities = [self.x[i, k], self.w[i, k], self.y[i, k], self.z[i, k]]
+                compartment = probabilities.index(max(probabilities))
+                self.totals[compartment, k]+=1
+                # Add compartments for visualization
+                if visualization:
+                    comp_dict[i] = compartment
+            if visualization:
+                # Add compartments dictionary to list
+                self.nodes_comp.append(comp_dict)

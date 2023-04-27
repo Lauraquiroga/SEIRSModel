@@ -93,3 +93,9 @@ class Network:
         self.init_states[States.S.value]=np.ones(self.n, dtype=float)
         self.init_states[States.S.value][infected_node]=0
         self.init_states[States.I.value][infected_node]=1
+
+    def set_nodes_compartment(self,compartments:dict):
+        """
+        Set each node's compartment (graph's attribute)
+        """
+        nx.set_node_attributes(self.graph, compartments, "compartment")
