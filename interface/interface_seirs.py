@@ -31,11 +31,9 @@ class InterfaceSEIRS:
 
         if self.load_mode.get()!=3:
             FileNameWindow(child_win, self)
-            self.win.mainloop
 
         else:
             NetSizeWindow(child_win, self)
-            self.win.mainloop
         
     def create_network(self, file_name="", net_size=0):
         if self.load_mode.get()!=3:
@@ -50,7 +48,6 @@ class InterfaceSEIRS:
     def init_params(self):
         child_win = tk.Toplevel(self.win)
         ModelParamsWindow(child_win, self)
-        self.win.mainloop
 
     def run_model(self, alpha, beta, delta, gamma):
         #rates:= dictionary with parameters
@@ -63,7 +60,7 @@ class InterfaceSEIRS:
     def show_results(self, model):
         child_win = tk.Toplevel(self.win)
         ResultsWindow(child_win, self, model)
-        self.win.mainloop
+        self.win.withdraw()
 
 def main(): 
     root = tk.Tk()

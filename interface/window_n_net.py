@@ -3,7 +3,7 @@ from tkinter import messagebox
 
 class NetSizeWindow:
     def __init__(self, win, master):
-        self.master=master
+        self.master = master
         self.win = win
         self.win.title('Network size')
         self.win.geometry("300x150")

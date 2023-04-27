@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 from .states import States
 from .network import Network
 
@@ -14,8 +15,10 @@ class SEIRS_Model:
 
         # n_times:= number of time-steps considered
         self.n_times = iterations
-        #resolution:= number of time-steps between one graph visualization and the other
+        # resolution:= number of time-steps between one graph visualization and the other
         self.resolution = 50
+        # colour_key:= colours for each compartment's visualization 
+        self.colour_key = {'S':'cornflowerblue', 'E':'darkorange', 'I':'red', 'R':'lime'}
 
         # x := probability of being in the S state for every node
         # w := probability of being in the E state for every node
@@ -67,8 +70,8 @@ class SEIRS_Model:
         """
         min_t = 0
         max_t = self.n_times/100
-        t = np.linspace(min_t, max_t, self.n_times)
-        dt = t[1] - t[0]
+        self.t = np.linspace(min_t, max_t, self.n_times)
+        dt = self.t[1] - self.t[0]
         
         # The arrays are filled in the for loop following the formula
         # Numeric solution to the ODE using Euler's method
@@ -78,7 +81,7 @@ class SEIRS_Model:
                 visualization = True
                 comp_dict = dict() #Dictionary with each node's compartments
 
-            t[k] = t[k - 1] + dt
+            self.t[k] = self.t[k - 1] + dt
             for i in range(self.network.n):
                 # Calculation of probabilities
                 self.w[i, k] = self.w[i, k - 1] + dt * self.w_prime( self.w[:, k - 1], self.y[:, k - 1],  self.z[:, k - 1], i)
@@ -98,3 +101,33 @@ class SEIRS_Model:
             if visualization:
                 # Add compartments dictionary to list
                 self.nodes_comp.append(comp_dict)
+
+    def plot_node_evolution(self, node:int):
+        """
+        Plot evolution of the give node's probabilities
+        """
+        fig = plt.figure(figsize=(8, 8))
+        plt.plot(self.t, self.x[node, :], label='Susceptible', color=self.colour_key['S'])
+        plt.plot(self.t, self.w[node, :], label='Exposed', color=self.colour_key['E'])
+        plt.plot(self.t, self.y[node, :], label='Infected', color=self.colour_key['I'])
+        plt.plot(self.t, self.z[node, :], label='Recovered', color=self.colour_key['R'])
+        plt.ylabel('Probability of being in the compartment')
+        plt.xlabel('Time')
+        plt.title(f"Evolution of device {node}'s probabilities")
+        plt.legend()
+        return fig
+    
+    def plot_network_evolution(self):
+        """
+        Plot evolution of the whole network
+        """
+        fig = plt.figure(figsize=(8, 8))
+        plt.plot(self.t, self.totals[0, :], label='Susceptible')
+        plt.plot(self.t, self.totals[1, :], label='Exposed')
+        plt.plot(self.t, self.totals[2, :], label='Infected')
+        plt.plot(self.t, self.totals[3, :], label='Recovered')
+        plt.ylabel('Number of devices')
+        plt.xlabel('Time')
+        plt.title(f"Evolution of total amount of devices per compartment")
+        plt.legend()
+        return fig

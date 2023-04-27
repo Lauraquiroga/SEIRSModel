@@ -5,7 +5,7 @@ class ModelParamsWindow:
     def __init__(self, win, master):
         self.master=master
         self.win = win
-        self.win.title('Model parameters')
+        self.win.title('Parameters')
         self.win.geometry("220x220")
         self.win.resizable(0,0)
 

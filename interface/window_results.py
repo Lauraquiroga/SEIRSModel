@@ -1,11 +1,13 @@
 import tkinter as tk
+from tkinter.ttk import Combobox
+from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
 from model.seirs_model import SEIRS_Model
-from tkinter import messagebox
 
 class ResultsWindow:
     def __init__(self, win, master, results:SEIRS_Model):
-        self.master=master
+        self.master = master
         self.win = win
+        self.results = results
         self.win.title('SEIRS Model Results')
         self.win.geometry("1000x500")
         self.win.resizable(0,0)
@@ -23,20 +25,51 @@ class ResultsWindow:
                                           command = self.show_node_evolution)
         self.btn_nd_evolution.place(x=150, y=460)
 
+        nodes = [x for x in range(self.results.n)]
+        self.cb_nodes=Combobox(win, values=nodes, state="readonly")
+        self.cb_nodes.current(0)
+        self.cb_nodes.place(x=60, y=150)
+
     def show_nw_evolution(self):
         """
         Pops a new window with the graph showing the
         evalution of the total amount of devices per compartment
         """
-        pass
+        child_win = tk.Toplevel(self.win)
+        child_win.title("Network evolution")
+        fig = self.results.plot_network_evolution()
+        canvas = FigureCanvasTkAgg(fig,
+                            master = child_win)
+    
+        canvas.draw()
+        canvas.get_tk_widget().pack()
+        toolbar = NavigationToolbar2Tk(canvas,
+                                    child_win)
+        toolbar.update()
+        canvas.get_tk_widget().pack()
 
     def show_node_evolution(self):
         """
         Lets the user choose a node and visualize 
         the evolution of that device's probabilities
         """
-        node = self.select_node()
-
-    def select_node(self):
-        pass
-
+        child_win = tk.Toplevel(self.win)
+        child_win.title("Node evolution")
+        node = int(self.cb_nodes.get())
+        fig = self.results.plot_node_evolution(node)
+        canvas = FigureCanvasTkAgg(fig,
+                            master = child_win)
+    
+        canvas.draw()
+        canvas.get_tk_widget().pack()
+        toolbar = NavigationToolbar2Tk(canvas,
+                                    child_win)
+        toolbar.update()
+        canvas.get_tk_widget().pack()
+    
+    def restart(self):
+        """
+        Generate a new model
+        """
+        self.win.destroy()
+        self.master.win.deiconify()
