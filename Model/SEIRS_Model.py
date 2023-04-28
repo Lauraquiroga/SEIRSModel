@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import networkx as nx
 from .states import States
 from .network import Network
 
@@ -130,4 +131,16 @@ class SEIRS_Model:
         plt.xlabel('Time')
         plt.title(f"Evolution of total amount of devices per compartment")
         plt.legend()
+        return fig
+    
+    def show_graph(self, step:int):
+        self.network.set_nodes_compartment(self.nodes_comp[step])
+        g_colours = [0]*self.n
+
+        for v,data in self.network.graph.nodes(data=True):
+            g_colours[v] = self.colour_key[States(data["compartment"]).name]
+
+        fig = plt.figure(figsize=(6, 6))
+        nx.draw(self.network.graph, node_color=g_colours, with_labels=True)
+        plt.axis("equal")
         return fig
