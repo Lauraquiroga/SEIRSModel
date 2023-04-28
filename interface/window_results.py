@@ -18,19 +18,18 @@ class ResultsWindow:
         self.lbl_title.place(x=20, y=20)
 
         self.current_step = len(self.results.nodes_comp)-1
-        self.current_t = self.current_step*(self.results.resolution)
 
-        self.lbl_xts = tk.Label(win, text=f"{self.current_t} time step")
+        self.lbl_xts = tk.Label(win, text=f"{self.current_step*(self.results.resolution)} time step")
         self.lbl_xts.place(x=475, y=y-80)
 
         self.btn_back = tk.Button(self.win,
                                           text = "<",
-                                          command = self.change_current_graph("back"))
+                                          command = lambda:self.change_current_graph("back"))
         self.btn_back.place(x=425, y=y-80)
 
         self.btn_ford = tk.Button(self.win,
                                           text = ">",
-                                          command = self.change_current_graph("ford"),
+                                          command =lambda:self.change_current_graph("ford"),
                                           state="disabled")
         
         self.btn_ford.place(x=560, y=y-80)
@@ -70,14 +69,24 @@ class ResultsWindow:
         self.win.bind("<Destroy>", self.kill_root)
 
     def show_graph(self):
-        fig = self.results.show_graph(self.current_step)
-        self.show_plot(self.win, fig)
+        self.fig = self.results.show_graph(self.current_step)
+        canvas = FigureCanvasTkAgg(self.fig, master = self.win)
+        canvas.draw()
+        toolbar = NavigationToolbar2Tk(canvas, self.win)
+        toolbar.update()
+        toolbar.place(x=600, y=20)
+        canvas.get_tk_widget().place(x=200, y=70)
 
     def change_current_graph(self, direction:str):
+        self.fig.clear()
         if(direction=="back"):
             self.current_step-=1
+            print(self.current_step)
         else:
             self.current_step+=1
+        # Update time step label
+        self.lbl_xts.config(text=f"{self.current_step*(self.results.resolution)} time step")
+        # Disable buttons to avoid OOR
         """
         if (self.current_step==0):
             self.btn_back["state"]="disabled"
