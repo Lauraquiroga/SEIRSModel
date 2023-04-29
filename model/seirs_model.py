@@ -20,7 +20,7 @@ class SEIRS_Model:
         # resolution:= number of time-steps between one graph visualization and the other
         self.resolution = 50
         # colour_key:= colours for each compartment's visualization 
-        self.colour_key = {'S':'cornflowerblue', 'E':'darkorange', 'I':'red', 'R':'lime'}
+        self.colour_key = {'S':'cornflowerblue', 'E':'darkorange', 'I':'red', 'R':'green'}
 
         # x := probability of being in the S state for every node
         # w := probability of being in the E state for every node
@@ -74,17 +74,23 @@ class SEIRS_Model:
         max_t = self.n_times/100
         self.t = np.linspace(min_t, max_t, self.n_times)
         dt = self.t[1] - self.t[0]
+        comp_dict = dict() # Dictionary with each node's compartments
+
+        for i in range(self.n):
+            # Add initial setup for visualization
+            comp_dict[i] = self.define_compartment(i,0)
+        self.nodes_comp.append(comp_dict)
         
         # The arrays are filled in the for loop following the formula
         # Numeric solution to the ODE using Euler's method
         for k in range(1, self.n_times):
             visualization = False
-            if k%self.resolution==0:
+            if k%self.resolution==0 or k==self.n_times-1:
                 visualization = True
-                comp_dict = dict() #Dictionary with each node's compartments
+                comp_dict = dict()
 
             self.t[k] = self.t[k - 1] + dt
-            for i in range(self.network.n):
+            for i in range(self.n):
                 # Calculation of probabilities
                 self.w[i, k] = self.w[i, k - 1] + dt * self.w_prime( self.w[:, k - 1], self.y[:, k - 1],  self.z[:, k - 1], i)
                 self.y[i, k] = self.y[i, k - 1] + dt * self.y_prime( self.w[:, k - 1], self.y[:, k - 1],  i)
@@ -94,15 +100,23 @@ class SEIRS_Model:
                     self.x[i, k]=0
 
                 # Highest probability -> Current compartment
-                probabilities = [self.x[i, k], self.w[i, k], self.y[i, k], self.z[i, k]]
-                compartment = probabilities.index(max(probabilities))
-                self.totals[compartment, k]+=1
+                compartment = self.define_compartment(i,k)
                 # Add compartments for visualization
                 if visualization:
                     comp_dict[i] = compartment
             if visualization:
                 # Add compartments dictionary to list
                 self.nodes_comp.append(comp_dict)
+    
+    def define_compartment(self, node, t_step):
+        """
+        Assign the node a current compartment according to the probabilities
+        Highest probability -> Current compartment
+        """
+        probabilities = [self.x[node, t_step], self.w[node, t_step], self.y[node, t_step], self.z[node, t_step]]
+        compartment = probabilities.index(max(probabilities))
+        self.totals[compartment, t_step]+=1
+        return compartment
 
     def plot_node_evolution(self, node:int):
         """

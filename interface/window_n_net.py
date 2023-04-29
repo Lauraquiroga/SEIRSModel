@@ -16,6 +16,7 @@ class NetSizeWindow:
                    height = 1,
                    width = 32)
         self.inputtxt_n.place(x=20, y=50)
+        self.inputtxt_n.bind('<Return>', self.return_key)
 
         self.btn_enter = tk.Button(self.win,
                         text = "Enter", 
@@ -27,6 +28,8 @@ class NetSizeWindow:
                         command = self.win.destroy)
         self.btn_cancel.place(x=150, y=80)
 
+    def return_key(self, event):
+        self.set_size()
 
     def set_size(self):
         n = self.inputtxt_n.get(1.0, "end-1c")

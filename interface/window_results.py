@@ -19,8 +19,13 @@ class ResultsWindow:
 
         self.current_step = len(self.results.nodes_comp)-1
 
-        self.lbl_xts = tk.Label(win, text=f"{self.current_step*(self.results.resolution)} time step")
+        self.lbl_xts = tk.Label(win, text=f"{self.results.n_times-1} time step")
         self.lbl_xts.place(x=475, y=y-80)
+
+        self.btn_first = tk.Button(self.win,
+                                          text = "|<",
+                                          command = lambda:self.change_current_graph("first"))
+        self.btn_first.place(x=400, y=y-80)
 
         self.btn_back = tk.Button(self.win,
                                           text = "<",
@@ -31,8 +36,13 @@ class ResultsWindow:
                                           text = ">",
                                           command =lambda:self.change_current_graph("ford"),
                                           state="disabled")
-        
         self.btn_ford.place(x=560, y=y-80)
+
+        self.btn_last = tk.Button(self.win,
+                                          text = ">|",
+                                          command = lambda:self.change_current_graph("last"),
+                                          state="disabled")
+        self.btn_last.place(x=585, y=y-80)
 
         # Display graph
         self.show_graph()
@@ -90,22 +100,33 @@ class ResultsWindow:
         self.fig.clear()
         if(direction=="back"):
             self.current_step-=1
-        else:
+        elif(direction=="ford"):
             self.current_step+=1
-            
+        elif(direction=="first"):
+            self.current_step=0
+        else:
+            self.current_step=len(self.results.nodes_comp)-1
+
         # Update time step label
-        self.lbl_xts.config(text=f"{self.current_step*(self.results.resolution)} time step")
-        # Disable buttons to avoid OOR
-    
+        if self.current_step!= len(self.results.nodes_comp)-1:
+            self.lbl_xts.config(text=f"{self.current_step*(self.results.resolution)} time step")
+        else:
+            self.lbl_xts.config(text=f"{self.results.n_times-1} time step")
+
+        # Disable buttons to avoid index out of range
         if (self.current_step==0):
             self.btn_back["state"]="disabled"
-        elif (self.current_step==1):
+            self.btn_first["state"]="disabled"
+        else:
             self.btn_back["state"]="normal"
+            self.btn_first["state"]="normal"
         
         if (self.current_step==len(self.results.nodes_comp)-1):
             self.btn_ford["state"]="disabled"
-        elif (self.current_step==len(self.results.nodes_comp)-2):
+            self.btn_last["state"]="disabled"
+        else:
             self.btn_ford["state"]="normal"
+            self.btn_last["state"]="normal"
         
         self.show_graph()
 
