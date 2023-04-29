@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
 import networkx as nx
 from .states import States
 from .network import Network
@@ -116,6 +117,7 @@ class SEIRS_Model:
         plt.xlabel('Time')
         plt.title(f"Evolution of device {node}'s probabilities")
         plt.legend()
+        plt.close()
         return fig
     
     def plot_network_evolution(self):
@@ -131,6 +133,7 @@ class SEIRS_Model:
         plt.xlabel('Time')
         plt.title(f"Evolution of total amount of devices per compartment")
         plt.legend()
+        plt.close()
         return fig
     
     def show_graph(self, step:int):
@@ -143,4 +146,12 @@ class SEIRS_Model:
         fig = plt.figure(figsize=(6, 6))
         nx.draw(self.network.graph, node_color=g_colours, with_labels=True)
         plt.axis("equal")
+        s_patch = mpatches.Patch(color=self.colour_key['S'], label='Susceptible')
+        e_patch = mpatches.Patch(color=self.colour_key['E'], label='Exposed')
+        i_patch = mpatches.Patch(color=self.colour_key['I'], label='Infected')
+        r_patch = mpatches.Patch(color=self.colour_key['R'], label='Recuperated')
+
+        # Create a legend and add the custom legend items
+        plt.legend(handles=[s_patch, e_patch, i_patch, r_patch], loc="best")
+        plt.close()
         return fig

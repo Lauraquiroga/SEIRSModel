@@ -51,7 +51,7 @@ class ResultsWindow:
         self.cb_nodes.place(x=380, y=y-40)
 
         self.btn_nd_evolution = tk.Button(self.win,
-                                          text = "See node evolution",
+                                          text = "See device evolution",
                                           command = self.show_node_evolution)
         self.btn_nd_evolution.place(x=480, y=y-40)
 
@@ -66,9 +66,13 @@ class ResultsWindow:
         self.btn_restart.place(x=780, y=y-40)
 
         # Bind kill root to destroy event
-        self.win.bind("<Destroy>", self.kill_root)
+        self.win.protocol("WM_DELETE_WINDOW", self.kill_root)
 
     def show_graph(self):
+        """
+        Display network with coloured nodes depending on 
+        compartments at current step
+        """
         self.fig = self.results.show_graph(self.current_step)
         canvas = FigureCanvasTkAgg(self.fig, master = self.win)
         canvas.draw()
@@ -78,26 +82,31 @@ class ResultsWindow:
         canvas.get_tk_widget().place(x=200, y=70)
 
     def change_current_graph(self, direction:str):
+        """
+        Move in direction (backwards or forwards) in time 
+        of the simulation to change graph visualization
+        """
+        
         self.fig.clear()
         if(direction=="back"):
             self.current_step-=1
-            print(self.current_step)
         else:
             self.current_step+=1
+            
         # Update time step label
         self.lbl_xts.config(text=f"{self.current_step*(self.results.resolution)} time step")
         # Disable buttons to avoid OOR
-        """
+    
         if (self.current_step==0):
             self.btn_back["state"]="disabled"
         elif (self.current_step==1):
             self.btn_back["state"]="normal"
         
         if (self.current_step==len(self.results.nodes_comp)-1):
-            self.btn_back["state"]="disabled"
+            self.btn_ford["state"]="disabled"
         elif (self.current_step==len(self.results.nodes_comp)-2):
-            self.btn_back["state"]="normal"
-        """
+            self.btn_ford["state"]="normal"
+        
         self.show_graph()
 
     def show_nw_evolution(self):
@@ -142,12 +151,12 @@ class ResultsWindow:
         """
         Generate a new model
         """
-        self.win.destroy()
         self.master.win.deiconify()
+        self.win.destroy()
 
-    def kill_root(self, event):
+    def kill_root(self):
         """
         Destroys master window on close
         """
-        if event.widget == self.win and self.master.win.winfo_exists():
+        if self.master.win.winfo_exists():
             self.master.win.destroy()
