@@ -1,6 +1,7 @@
 import numpy as np
 import json
 import networkx as nx
+import matplotlib.pyplot as plt
 from .states import States
 
 class Network:
@@ -105,3 +106,13 @@ class Network:
         Set each node's compartment (graph's attribute)
         """
         nx.set_node_attributes(self.graph, compartments, "compartment")
+
+    def draw_graph_structure(self):
+        """
+        Plot the graph structure
+        """
+        fig = plt.figure(figsize=(6, 6))
+        nx.draw(self.graph,  with_labels=True)
+        plt.axis("equal")
+        plt.close()
+        return fig
