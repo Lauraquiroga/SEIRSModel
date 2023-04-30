@@ -44,7 +44,10 @@ class Network:
                     self.init_states[States.I.value][node]=data[node]['I']
                     self.init_states[States.R.value][node]=data[node]['R']
         except FileNotFoundError as fnf:
-            raise FileNotFoundError(str(fnf))
+            mess = str(fnf).split('] ', 1)[1]
+            raise FileNotFoundError(mess)
+        except Exception as e:
+            raise Exception(f"Unable to parse te json file {file_name}")
 
     def load_struc_from_json(self, file_name):
         """
@@ -61,7 +64,10 @@ class Network:
                 self.graph = nx.Graph(self.adjMatrix)
                 self.init_states = np.zeros((4,self.n), dtype=float)
         except FileNotFoundError as fnf:
-            raise FileNotFoundError(str(fnf))
+            mess = str(fnf).split('] ', 1)[1]
+            raise FileNotFoundError(mess)
+        except Exception as e:
+            raise Exception(f"Unable to parse te json file {file_name}")
 
     def generate_random(self, net_size):
         """

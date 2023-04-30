@@ -75,7 +75,7 @@ class ResultsWindow:
                                           command = self.restart)
         self.btn_restart.place(x=780, y=y-40)
 
-        # Bind kill root to destroy event
+        # Bind kill root to destroy event with close button
         self.win.protocol("WM_DELETE_WINDOW", self.kill_root)
 
     def show_graph(self):

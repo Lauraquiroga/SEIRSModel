@@ -39,9 +39,9 @@ class InterfaceSEIRS:
         if self.load_mode.get()!=3:
             try:
                 self.network = Network(self.load_mode.get(), file_name=file_name)
-            except FileNotFoundError as e:
-                mess = str(e).split('] ', 1)[1]
-                messagebox.showerror(message=mess)
+                self.init_params()
+            except Exception as e:
+                messagebox.showerror(message=e)
         else:
             self.network = Network(self.load_mode.get(), net_size=net_size)
     

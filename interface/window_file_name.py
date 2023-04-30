@@ -1,5 +1,7 @@
+import os
 import tkinter as tk
 from tkinter import messagebox
+import json
 
 class FileNameWindow:
     def __init__(self, win, master):
@@ -28,5 +30,9 @@ class FileNameWindow:
 
 
     def set_file_name(self):
-        self.master.create_network(file_name=self.inputtxt_file.get(1.0, "end-1c"))
+        current_dir = (f"{os.getcwd()}\data")
+        file_name = self.inputtxt_file.get(1.0, "end-1c") # with .json extension
+        path = (f"{current_dir}\{file_name}")
+
+        self.master.create_network(file_name=path)
         self.win.destroy()
