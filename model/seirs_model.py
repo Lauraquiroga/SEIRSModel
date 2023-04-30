@@ -108,6 +108,8 @@ class SEIRS_Model:
                 # Add compartments dictionary to list
                 self.nodes_comp.append(comp_dict)
     
+    # ----------------- Visualization of the model results ---------------------------
+
     def define_compartment(self, node, t_step):
         """
         Assign the node a current compartment according to the probabilities
@@ -151,6 +153,9 @@ class SEIRS_Model:
         return fig
     
     def show_graph(self, step:int):
+        """
+        Plot the graph structure with node colours representing states
+        """
         self.network.set_nodes_compartment(self.nodes_comp[step])
         g_colours = [0]*self.n
 

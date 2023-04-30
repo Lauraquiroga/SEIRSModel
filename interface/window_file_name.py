@@ -1,7 +1,5 @@
 import os
 import tkinter as tk
-from tkinter import messagebox
-import json
 
 class FileNameWindow:
     def __init__(self, win, master):
@@ -18,6 +16,8 @@ class FileNameWindow:
                    height = 1,
                    width = 45)
         self.inputtxt_file.place(x=20, y=50)
+        self.inputtxt_file.bind('<Return>', self.return_key)
+
         btn_enter = tk.Button(self.win,
                         text = "Enter", 
                         command = self.set_file_name)
@@ -28,6 +28,8 @@ class FileNameWindow:
                         command = self.win.destroy)
         btn_cancel.place(x=200, y=80)
 
+    def return_key(self, event):
+        self.set_file_name()
 
     def set_file_name(self):
         current_dir = (f"{os.getcwd()}\data")
