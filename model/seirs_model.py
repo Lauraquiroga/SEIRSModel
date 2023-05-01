@@ -7,15 +7,13 @@ from .network import Network
 
 class SEIRS_Model:
     # ------------------ Model definition and initialization -------------------
-    def __init__(self, network: Network, iterations: int, rates:dict, initially_inf:-1) -> None:
+    def __init__(self, network: Network, iterations: int, rates:dict) -> None:
         # network:= Network object -> Information of devices and connections
         self.network = network
         self.n = self.network.n
         
         # rates := probabilities to change of state {alpha, beta, delta, gamma}
         self.rates = rates
-        # initially infected node chosen by the user
-        self.initially_inf= initially_inf
 
         # n_times:= number of time-steps considered
         self.n_times = iterations

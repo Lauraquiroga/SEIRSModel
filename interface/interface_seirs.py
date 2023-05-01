@@ -54,14 +54,11 @@ class InterfaceSEIRS:
         child_win = tk.Toplevel(self.win)
         InitInfectionWindow(child_win, self, rates)
 
-    def run_model(self, alpha, beta, delta, gamma, init_inf=-1):
+    def run_model(self, alpha, beta, delta, gamma):
         #rates:= dictionary with parameters
         rates = {'alpha': alpha, 'beta':beta, 'delta':delta, 'gamma':gamma}
         #initialize and run the model
-        if self.load_mode==1:
-            model = SEIRS_Model(self.network, 1000, rates)
-        else:
-            model = SEIRS_Model(self.network, 1000, rates, init_inf)
+        model = SEIRS_Model(self.network, 1000, rates)
         model.run_model()
         self.show_results(model)
 
