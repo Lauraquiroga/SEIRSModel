@@ -4,6 +4,7 @@ from window_file_name import FileNameWindow
 from window_n_net import NetSizeWindow
 from window_params import ModelParamsWindow
 from window_results import ResultsWindow
+from window_initially_inf import InitInfectionWindow
 from model.network import Network
 from model.seirs_model import SEIRS_Model
 
@@ -49,11 +50,18 @@ class InterfaceSEIRS:
         child_win = tk.Toplevel(self.win)
         ModelParamsWindow(child_win, self)
 
-    def run_model(self, alpha, beta, delta, gamma):
+    def set_initially_inf(self, rates):
+        child_win = tk.Toplevel(self.win)
+        InitInfectionWindow(child_win, self, rates)
+
+    def run_model(self, alpha, beta, delta, gamma, init_inf=-1):
         #rates:= dictionary with parameters
         rates = {'alpha': alpha, 'beta':beta, 'delta':delta, 'gamma':gamma}
         #initialize and run the model
-        model = SEIRS_Model(self.network, 1000, rates)
+        if self.load_mode==1:
+            model = SEIRS_Model(self.network, 1000, rates)
+        else:
+            model = SEIRS_Model(self.network, 1000, rates, init_inf)
         model.run_model()
         self.show_results(model)
 

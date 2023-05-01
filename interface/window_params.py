@@ -119,7 +119,11 @@ class ModelParamsWindow:
         delta = round(self.current_delta.get(),2)
         gamma = round(self.current_gamma.get(),2)
 
-        self.master.run_model(alpha, beta, delta, gamma)
+        if self.master.load_mode==1:
+            self.master.run_model(alpha, beta, delta, gamma)
+        else:
+            self.master.set_initially_inf(rates=[alpha, beta, delta, gamma])
+
         self.win.destroy()
                 
     def slider_changed(self, value, label):

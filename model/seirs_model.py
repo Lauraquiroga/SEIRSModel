@@ -7,13 +7,15 @@ from .network import Network
 
 class SEIRS_Model:
     # ------------------ Model definition and initialization -------------------
-    def __init__(self, network: Network, iterations: int, rates:dict) -> None:
+    def __init__(self, network: Network, iterations: int, rates:dict, initially_inf:-1) -> None:
         # network:= Network object -> Information of devices and connections
         self.network = network
         self.n = self.network.n
         
         # rates := probabilities to change of state {alpha, beta, delta, gamma}
         self.rates = rates
+        # initially infected node chosen by the user
+        self.initially_inf= initially_inf
 
         # n_times:= number of time-steps considered
         self.n_times = iterations
@@ -35,11 +37,9 @@ class SEIRS_Model:
         # nodes_comp := list of {iterations/resolution} dictionaries containing the compartment of each node at {resolution}-spaced iterations
         self.nodes_comp = []
 
-        # !!!!!!!!!!!!!por ahora lo voy a inicializar en un nodo cualquiera!!!!!!!!!!!!!!!!!!!!!!!!
-        self.x[3,0] = 0
-        self.y[3, 0] = 1  # 4th node has the virus initially
-        self.totals[States.S.value,0]=self.n-1
-        self.totals[States.I.value,0]=1
+        if self.initially_inf!=-1:
+            self.x[self.initially_inf,0] = 0
+            self.y[self.initially_inf, 0] = 1  # node that has the virus initially
 
     # ------------ Definition of the system of differential equations ------------
 
@@ -79,6 +79,8 @@ class SEIRS_Model:
         for i in range(self.n):
             # Add initial setup for visualization
             comp_dict[i] = self.define_compartment(i,0)
+            # Setting initial total devices per compartment
+            self.totals[comp_dict[i],0]+=1
         self.nodes_comp.append(comp_dict)
         
         # The arrays are filled in the for loop following the formula
