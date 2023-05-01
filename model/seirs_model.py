@@ -28,18 +28,19 @@ class SEIRS_Model:
         # w := probability of being in the E state for every node
         # y := probability of being in the I state for every node
         # z := probability of being in the R state for every node
-        self.x = np.ones((self.n, iterations)) # all nodes start in susceptible state
+        self.x = np.zeros((self.n, iterations))
         self.w = np.zeros((self.n, iterations))
         self.y = np.zeros((self.n, iterations))
         self.z = np.zeros((self.n, iterations))
+        self.x[:,0] = self.network.init_states[States.S.value]
+        self.w[:,0] = self.network.init_states[States.E.value]
+        self.y[:,0] = self.network.init_states[States.I.value]
+        self.z[:,0] = self.network.init_states[States.R.value]
         # totals := total number of nodes on each compartment per iteration
         self.totals = np.zeros((4,iterations))
         # nodes_comp := list of {iterations/resolution} dictionaries containing the compartment of each node at {resolution}-spaced iterations
         self.nodes_comp = []
 
-        if self.initially_inf!=-1:
-            self.x[self.initially_inf,0] = 0
-            self.y[self.initially_inf, 0] = 1  # node that has the virus initially
 
     # ------------ Definition of the system of differential equations ------------
 

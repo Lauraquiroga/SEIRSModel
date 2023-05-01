@@ -119,7 +119,6 @@ class ModelParamsWindow:
         delta = round(self.current_delta.get(),2)
         gamma = round(self.current_gamma.get(),2)
 
-        print(self.master.load_mode.get())
         if self.master.load_mode.get()==1:
             self.master.run_model(alpha, beta, delta, gamma)
         else:

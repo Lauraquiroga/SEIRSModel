@@ -38,9 +38,9 @@ class InitInfectionWindow:
 
     def choose_node(self):
         init_inf = int(self.cb_nodes.get())
+        self.network.initialize_probs(init_inf)
         self.master.run_model(self.rates[0],
                               self.rates[1],
                               self.rates[2],
-                              self.rates[3], 
-                              init_inf)
+                              self.rates[3])
         self.win.destroy()
