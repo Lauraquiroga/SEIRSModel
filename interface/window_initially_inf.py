@@ -21,7 +21,7 @@ class InitInfectionWindow:
         self.cb_nodes.current(0)
         self.cb_nodes.place(x=20, y=40)
 
-        self.btn_choose = tk.Button(master=self.win, text='Choose', command=self.choose_node)
+        self.btn_choose = tk.Button(master=self.win, text='Select', command=self.choose_node)
         self.btn_choose.place(x=20, y=70)
 
         # Display graph

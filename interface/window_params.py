@@ -13,12 +13,12 @@ class ModelParamsWindow:
         self.lbl_init_network.place(x=20, y=20)
 
         self.lbl_alpha = tk.Label(win, text='Alpha:')
-        self.lbl_alpha.place(x=20, y=60)
+        self.lbl_alpha.place(x=20, y=90)
 
         self.a_value_label = tk.Label(
                         self.win,
                         text=0.5)
-        self.a_value_label.place(x=80, y=60)
+        self.a_value_label.place(x=80, y=90)
 
         self.current_alpha = tk.DoubleVar()
 
@@ -32,16 +32,16 @@ class ModelParamsWindow:
                         variable= self.current_alpha,
                         command= lambda x: self.slider_changed(x, self.a_value_label))
         self.slider_a.set(0.5)
-        self.slider_a.place(x=130, y=60)
+        self.slider_a.place(x=130, y=90)
         
 
         self.lbl_beta = tk.Label(win, text='Beta:')
-        self.lbl_beta.place(x=20, y=90)
+        self.lbl_beta.place(x=20, y=60)
         
         self.b_value_label = tk.Label(
                         self.win,
                         text=0.5)
-        self.b_value_label.place(x=80, y=90)
+        self.b_value_label.place(x=80, y=60)
 
         self.current_beta = tk.DoubleVar()
 
@@ -55,7 +55,7 @@ class ModelParamsWindow:
                         variable= self.current_beta,
                         command= lambda x: self.slider_changed(x, self.b_value_label))
         self.slider_b.set(0.5)
-        self.slider_b.place(x=130, y=90)
+        self.slider_b.place(x=130, y=60)
 
         self.lbl_delta = tk.Label(win, text='Delta:')
         self.lbl_delta.place(x=20, y=120)
