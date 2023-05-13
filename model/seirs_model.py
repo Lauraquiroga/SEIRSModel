@@ -49,7 +49,7 @@ class SEIRS_Model:
         The rate of change of the probability of the node (i) being in the Exposed state:
         w'(t) = (1-w(t)-y(t)-z(t))*b(t) - alpha*w(t)
         """
-        return (1-w[i]-y[i]-z[i])*np.dot(self.network.adjMatrix[i,:], y) - self.rates["alpha"]*w[i]
+        return (1-w[i]-y[i]-z[i])*self.rates["beta"]*np.dot(self.network.adjMatrix[i,:], y) - self.rates["alpha"]*w[i]
 
     def y_prime(self, w, y, i):
         """

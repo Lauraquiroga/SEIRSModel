@@ -11,7 +11,7 @@ from model.seirs_model import SEIRS_Model
 class InterfaceSEIRS:
     def __init__(self, win):
         self.win = win
-
+        
         self.lbl_init_network = tk.Label(win, text='Select how to initialize the network:')
         self.lbl_init_network.place(x=20, y=20)
 
