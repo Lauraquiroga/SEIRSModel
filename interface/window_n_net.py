@@ -7,7 +7,7 @@ class NetSizeWindow:
         self.master = master
         self.win = win
         self.win.title('Network setup')
-        self.win.geometry("300x170")
+        self.win.geometry("300x180")
         self.win.resizable(0,0)
 
         self.lbl_init_network = tk.Label(win, text='Enter the number of devices in the network:')
@@ -20,12 +20,12 @@ class NetSizeWindow:
         self.inputtxt_n.bind('<Return>', self.return_key)
 
         self.lbl_init_network = tk.Label(win, text='Enter the network density:')
-        self.lbl_init_network.place(x=20, y=70)
+        self.lbl_init_network.place(x=20, y=80)
         
         self.density_value_label = tk.Label(
                         self.win,
-                        text=50)
-        self.density_value_label.place(x=230, y=90)
+                        text=f"{50}%")
+        self.density_value_label.place(x=235, y=100)
 
         self.current_density = tk.DoubleVar()
 
@@ -39,30 +39,29 @@ class NetSizeWindow:
                         variable= self.current_density,
                         command= lambda x: self.slider_changed(x, self.density_value_label))
         self.slider_density.set(50)
-        self.slider_density.place(x=20, y=90)
+        self.slider_density.place(x=20, y=100)
 
         self.btn_enter = tk.Button(self.win,
                         text = "Enter", 
                         command = self.set_size)
-        self.btn_enter.place(x=100, y=120)
+        self.btn_enter.place(x=100, y=135)
 
         self.btn_cancel = tk.Button(self.win,
                         text = "Cancel", 
                         command = self.win.destroy)
-        self.btn_cancel.place(x=150, y=120)
+        self.btn_cancel.place(x=150, y=135)
 
     def return_key(self, event):
         self.set_size()
 
     def slider_changed(self, value, label):
-        label.configure(text='{: .2f}'.format(float(value)))
+        label.configure(text='{: .2f}'.format(float(value))+'%')
 
     def set_size(self):
         n = self.inputtxt_n.get(1.0, "end-1c")
         if (n.isdigit()):
-            density = round(self.current_density.get(),2)
-            print(density)
-            self.master.create_network(net_size=int(n))
+            density = round(self.current_density.get()/100,2)
+            self.master.create_network(net_size=int(n), density=density)
             self.win.destroy()
             self.master.init_params()
         else:

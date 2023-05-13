@@ -36,7 +36,7 @@ class InterfaceSEIRS:
         else:
             NetSizeWindow(child_win, self)
         
-    def create_network(self, file_name="", net_size=0):
+    def create_network(self, file_name="", net_size=0, density=0.0):
         if self.load_mode.get()!=3:
             try:
                 self.network = Network(self.load_mode.get(), file_name=file_name)
@@ -44,7 +44,7 @@ class InterfaceSEIRS:
             except Exception as e:
                 messagebox.showerror(message=e)
         else:
-            self.network = Network(self.load_mode.get(), net_size=net_size)
+            self.network = Network(self.load_mode.get(), net_size=net_size, density=density)
     
     def init_params(self):
         child_win = tk.Toplevel(self.win)
