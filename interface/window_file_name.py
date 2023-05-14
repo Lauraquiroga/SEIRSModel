@@ -5,6 +5,8 @@ class FileNameWindow:
     def __init__(self, win, master):
         self.master=master
         self.win = win
+        self.win.grab_set()
+        self.win.focus_set()
         self.win.title('File name')
         self.win.geometry("400x150")
         self.win.resizable(0,0)

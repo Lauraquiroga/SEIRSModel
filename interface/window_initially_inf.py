@@ -7,6 +7,8 @@ class InitInfectionWindow:
     def __init__(self, win, master, rates):
         self.master=master
         self.win = win
+        self.win.grab_set()
+        self.win.focus_set()
         self.win.title('Initially infected')
         self.win.geometry("1000x700")
         self.win.resizable(0,0)

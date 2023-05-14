@@ -6,6 +6,8 @@ class NetSizeWindow:
     def __init__(self, win, master):
         self.master = master
         self.win = win
+        self.win.grab_set()
+        self.win.focus_set()
         self.win.title('Network setup')
         self.win.geometry("300x180")
         self.win.resizable(0,0)
@@ -59,10 +61,12 @@ class NetSizeWindow:
 
     def set_size(self):
         n = self.inputtxt_n.get(1.0, "end-1c")
-        if (n.isdigit()):
+        if (n.isdigit() and int(n)>1):
             density = round(self.current_density.get()/100,2)
             self.master.create_network(net_size=int(n), density=density)
             self.win.destroy()
             self.master.init_params()
+        elif (n.isdigit() and int(n)<=1):
+            messagebox.showerror(message="The network must have at least 2 devices")
         else:
-            messagebox.showerror(message="The netwrok size must be an integer")
+            messagebox.showerror(message="The network size must be an integer")
