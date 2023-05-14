@@ -1,3 +1,8 @@
+# --------------------------------------------------------------------------
+# Network class: IoT device network construction
+# Author: Laura Quiroga
+# --------------------------------------------------------------------------
+
 import numpy as np
 import json
 import networkx as nx

@@ -1,3 +1,8 @@
+# --------------------------------------------------------------------------
+# Simulation of the NIMFA SEIRS model for a homogeneous network with constant parameters
+# Author: Laura Quiroga
+# --------------------------------------------------------------------------
+
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
