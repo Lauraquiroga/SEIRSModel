@@ -21,7 +21,8 @@ class SEIRS_Model:
         self.rates = rates
 
         # resolution:= number of time-steps between one graph visualization and the other
-        self.resolution = 50
+        self.resolution = 50 # 50 = 0.5 time step
+
         # colour_key:= colours for each compartment's visualization 
         self.colour_key = {'S':'cornflowerblue', 'E':'darkorange', 'I':'red', 'R':'green'}
 
@@ -33,12 +34,16 @@ class SEIRS_Model:
         self.w = np.zeros((self.n, 1))
         self.y = np.zeros((self.n, 1))
         self.z = np.zeros((self.n, 1))
+
+        # Probabilities initialization
         self.x[:,0] = self.network.init_states[States.S.value]
         self.w[:,0] = self.network.init_states[States.E.value]
         self.y[:,0] = self.network.init_states[States.I.value]
         self.z[:,0] = self.network.init_states[States.R.value]
+
         # totals := total number of nodes on each compartment per iteration
         self.totals = np.zeros((4,1))
+        
         # nodes_comp := list of {iterations/resolution} dictionaries containing the compartment of each node at {resolution}-spaced iterations
         self.nodes_comp = []
 
@@ -76,8 +81,10 @@ class SEIRS_Model:
         self.t = [0]
         comp_dict = dict() # Dictionary with each node's compartments
 
-        k=1
+        # Convergence condition: counter=10
         convergence_count = 0
+        # Max number of iterations: k=1500 (15 time steps)
+        k=1
         for i in range(self.n):
             # Add initial setup for visualization
             comp_dict[i] = self.define_compartment(i,0)
@@ -124,7 +131,7 @@ class SEIRS_Model:
             #Convergence test
             diff_s = np.linalg.norm(self.x[:,k] - self.x[:,k-1])
             diff_i = np.linalg.norm(self.y[:,k] - self.y[:,k-1])
-            if (diff_s<0.001 and diff_i<0.001):
+            if (diff_s<0.0001 and diff_i<0.0001):
                 convergence_count+=1
             else:
                 convergence_count=0
