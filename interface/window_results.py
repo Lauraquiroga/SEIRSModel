@@ -19,7 +19,7 @@ class ResultsWindow:
 
         self.current_step = len(self.results.nodes_comp)-1
 
-        self.lbl_xts = tk.Label(win, text=f"{self.results.n_times-1} time step")
+        self.lbl_xts = tk.Label(win, text=f"{self.current_step*0.5} time step")
         self.lbl_xts.place(x=475, y=y-80)
 
         self.btn_first = tk.Button(self.win,
@@ -108,10 +108,7 @@ class ResultsWindow:
             self.current_step=len(self.results.nodes_comp)-1
 
         # Update time step label
-        if self.current_step!= len(self.results.nodes_comp)-1:
-            self.lbl_xts.config(text=f"{self.current_step*(self.results.resolution)} time step")
-        else:
-            self.lbl_xts.config(text=f"{self.results.n_times-1} time step")
+        self.lbl_xts.config(text=f"{self.current_step*0.5} time step")
 
         # Disable buttons to avoid index out of range
         if (self.current_step==0):

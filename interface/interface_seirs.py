@@ -58,7 +58,7 @@ class InterfaceSEIRS:
         #rates:= dictionary with parameters
         rates = {'alpha': alpha, 'beta':beta, 'delta':delta, 'gamma':gamma}
         #initialize and run the model
-        model = SEIRS_Model(self.network, 1000, rates)
+        model = SEIRS_Model(self.network, rates)
         model.run_model()
         self.show_results(model)
 

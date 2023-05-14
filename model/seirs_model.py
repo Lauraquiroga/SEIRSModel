@@ -12,7 +12,7 @@ from .network import Network
 
 class SEIRS_Model:
     # ------------------ Model definition and initialization -------------------
-    def __init__(self, network: Network, iterations: int, rates:dict) -> None:
+    def __init__(self, network: Network, rates:dict) -> None:
         # network:= Network object -> Information of devices and connections
         self.network = network
         self.n = self.network.n
@@ -20,8 +20,6 @@ class SEIRS_Model:
         # rates := probabilities to change of state {alpha, beta, delta, gamma}
         self.rates = rates
 
-        # n_times:= number of time-steps considered
-        self.n_times = iterations
         # resolution:= number of time-steps between one graph visualization and the other
         self.resolution = 50
         # colour_key:= colours for each compartment's visualization 
@@ -31,16 +29,16 @@ class SEIRS_Model:
         # w := probability of being in the E state for every node
         # y := probability of being in the I state for every node
         # z := probability of being in the R state for every node
-        self.x = np.zeros((self.n, iterations))
-        self.w = np.zeros((self.n, iterations))
-        self.y = np.zeros((self.n, iterations))
-        self.z = np.zeros((self.n, iterations))
+        self.x = np.zeros((self.n, 1))
+        self.w = np.zeros((self.n, 1))
+        self.y = np.zeros((self.n, 1))
+        self.z = np.zeros((self.n, 1))
         self.x[:,0] = self.network.init_states[States.S.value]
         self.w[:,0] = self.network.init_states[States.E.value]
         self.y[:,0] = self.network.init_states[States.I.value]
         self.z[:,0] = self.network.init_states[States.R.value]
         # totals := total number of nodes on each compartment per iteration
-        self.totals = np.zeros((4,iterations))
+        self.totals = np.zeros((4,1))
         # nodes_comp := list of {iterations/resolution} dictionaries containing the compartment of each node at {resolution}-spaced iterations
         self.nodes_comp = []
 
@@ -74,12 +72,12 @@ class SEIRS_Model:
         """
         Executes the model simulation
         """
-        min_t = 0
-        max_t = self.n_times/100
-        self.t = np.linspace(min_t, max_t, self.n_times)
-        dt = self.t[1] - self.t[0]
+        dt = 1/100
+        self.t = [0]
         comp_dict = dict() # Dictionary with each node's compartments
 
+        k=1
+        convergence_count = 0
         for i in range(self.n):
             # Add initial setup for visualization
             comp_dict[i] = self.define_compartment(i,0)
@@ -89,11 +87,20 @@ class SEIRS_Model:
         
         # The arrays are filled in the for loop following the formula
         # Numeric solution to the ODE using Euler's method
-        for k in range(1, self.n_times):
+        while(convergence_count<10 or k==1500):
             visualization = False
-            if k%self.resolution==0 or k==self.n_times-1:
+            # Add iteration
+            self.t.append(self.t[k - 1] + dt)
+            self.x = np.pad(self.x, [(0,0),(0,1)], mode='constant')
+            self.w = np.pad(self.w, [(0,0),(0,1)], mode='constant')
+            self.y = np.pad(self.y, [(0,0),(0,1)], mode='constant')
+            self.z = np.pad(self.z, [(0,0),(0,1)], mode='constant')
+            self.totals = np.pad(self.totals, [(0,0),(0,1)], mode='constant')
+
+            if k%self.resolution==0:
                 visualization = True
                 comp_dict = dict()
+            
 
             self.t[k] = self.t[k - 1] + dt
             for i in range(self.n):
@@ -113,6 +120,17 @@ class SEIRS_Model:
             if visualization:
                 # Add compartments dictionary to list
                 self.nodes_comp.append(comp_dict)
+
+            #Convergence test
+            diff_s = np.linalg.norm(self.x[:,k] - self.x[:,k-1])
+            diff_i = np.linalg.norm(self.y[:,k] - self.y[:,k-1])
+            if (diff_s<0.001 and diff_i<0.001):
+                convergence_count+=1
+            else:
+                convergence_count=0
+
+            #Advance iteration
+            k+=1
     
     # ----------------- Visualization of the model results ---------------------------
 
