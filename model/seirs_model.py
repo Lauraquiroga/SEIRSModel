@@ -21,7 +21,7 @@ class SEIRS_Model:
         self.rates = rates
 
         # resolution:= number of time-steps between one graph visualization and the other
-        self.resolution = 50 # 50 = 0.5 time step
+        self.resolution = 50 # 50 => 0.5 time step
 
         # colour_key:= colours for each compartment's visualization 
         self.colour_key = {'S':'cornflowerblue', 'E':'darkorange', 'I':'red', 'R':'green'}
@@ -43,7 +43,7 @@ class SEIRS_Model:
 
         # totals := total number of nodes on each compartment per iteration
         self.totals = np.zeros((4,1))
-        
+
         # nodes_comp := list of {iterations/resolution} dictionaries containing the compartment of each node at {resolution}-spaced iterations
         self.nodes_comp = []
 
@@ -85,14 +85,15 @@ class SEIRS_Model:
         convergence_count = 0
         # Max number of iterations: k=1500 (15 time steps)
         k=1
+
         for i in range(self.n):
             # Add initial setup for visualization
             comp_dict[i] = self.define_compartment(i,0)
-            # Setting initial total devices per compartment
+            # Set initial total devices per compartment
             self.totals[comp_dict[i],0]+=1
         self.nodes_comp.append(comp_dict)
         
-        # The arrays are filled in the for loop following the formula
+        # The arrays are filled in the while loop following the formula
         # Numeric solution to the ODE using Euler's method
         while(convergence_count<10 or k==1500):
             visualization = False
@@ -108,7 +109,6 @@ class SEIRS_Model:
                 visualization = True
                 comp_dict = dict()
             
-
             self.t[k] = self.t[k - 1] + dt
             for i in range(self.n):
                 # Calculation of probabilities
@@ -128,7 +128,7 @@ class SEIRS_Model:
                 # Add compartments dictionary to list
                 self.nodes_comp.append(comp_dict)
 
-            #Convergence test
+            # Convergence test
             diff_s = np.linalg.norm(self.x[:,k] - self.x[:,k-1])
             diff_i = np.linalg.norm(self.y[:,k] - self.y[:,k-1])
             if (diff_s<0.0001 and diff_i<0.0001):
@@ -136,7 +136,7 @@ class SEIRS_Model:
             else:
                 convergence_count=0
 
-            #Advance iteration
+            # Advance iteration
             k+=1
     
     # ----------------- Visualization of the model results ---------------------------
@@ -153,7 +153,7 @@ class SEIRS_Model:
 
     def plot_node_evolution(self, node:int):
         """
-        Plot evolution of the give node's probabilities
+        Plot evolution of the given node's probabilities
         """
         fig = plt.figure(figsize=(8, 8))
         plt.plot(self.t, self.x[node, :], label='Susceptible', color=self.colour_key['S'])
