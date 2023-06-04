@@ -12,7 +12,7 @@ class ModelParamsWindow:
         self.lbl_init_network = tk.Label(win, text='Enter the model parameters:')
         self.lbl_init_network.place(x=20, y=20)
 
-        self.lbl_alpha = tk.Label(win, text='Alpha:')
+        self.lbl_alpha = tk.Label(win, text=chr(945))
         self.lbl_alpha.place(x=20, y=90)
 
         self.a_value_label = tk.Label(
@@ -35,7 +35,7 @@ class ModelParamsWindow:
         self.slider_a.place(x=130, y=90)
         
 
-        self.lbl_beta = tk.Label(win, text='Beta:')
+        self.lbl_beta = tk.Label(win, text=chr(946))
         self.lbl_beta.place(x=20, y=60)
         
         self.b_value_label = tk.Label(
@@ -57,7 +57,7 @@ class ModelParamsWindow:
         self.slider_b.set(0.5)
         self.slider_b.place(x=130, y=60)
 
-        self.lbl_delta = tk.Label(win, text='Delta:')
+        self.lbl_delta = tk.Label(win, text=chr(948))
         self.lbl_delta.place(x=20, y=120)
         self.d_value_label = tk.Label(
                         self.win,
@@ -79,7 +79,7 @@ class ModelParamsWindow:
         self.slider_d.set(0.5)
         self.slider_d.place(x=130, y=120)
 
-        self.lbl_gamma = tk.Label(win, text='Gamma:')
+        self.lbl_gamma = tk.Label(win, text=chr(947))
         self.lbl_gamma.place(x=20, y=150)
         self.g_value_label = tk.Label(
                         self.win,
