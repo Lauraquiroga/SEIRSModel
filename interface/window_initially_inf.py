@@ -15,7 +15,7 @@ class InitInfectionWindow:
         self.network:Network = self.master.network
         self.rates = rates
 
-        self.lbl_init_network = tk.Label(win, text='Run model for each network node')
+        self.lbl_init_network = tk.Label(win, text='Run model for each network node:')
         self.lbl_init_network.place(x=20, y=20)
 
         self.btn_choose = tk.Button(master=self.win, text='Go!', command=self.run_heat_map)

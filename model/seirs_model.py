@@ -75,7 +75,7 @@ class SEIRS_Model:
 
     def run_model(self) -> None:
         """
-        Executes the model simulation
+        Executes the model simulation until convergence is reached
         """
         dt = 1/100
         self.t = [0]
@@ -138,6 +138,13 @@ class SEIRS_Model:
 
             # Advance iteration
             k+=1
+
+    def run_model_fe_node(self):
+        """
+        Executes the model simulation for each (fe) node in the network
+        for a fixed number of iterations
+        """
+        self.t_steps_fixed = 15
     
     # ----------------- Visualization of the model results ---------------------------
 
@@ -203,5 +210,41 @@ class SEIRS_Model:
 
         # Create a legend and add the custom legend items
         plt.legend(handles=[s_patch, e_patch, i_patch, r_patch], loc="best")
+        plt.close()
+        return fig
+    
+    def show_heatmap(self, total_i):
+        """
+        Plot the heatmap with the evolution of the total amount of infected devices
+        by initially infected node
+        """
+        matrix = np.asarray(total_i, dtype=float)
+
+        fig = plt.figure(figsize=(6, 6))
+
+        # Create the reversed "hot" colormap
+        reversed_hot_cmap = plt.cm.hot_r
+        plt.imshow(matrix, cmap=reversed_hot_cmap, aspect='equal')
+        
+        cbar = plt.colorbar()
+        cbar.set_label('Number of infected nodes')
+        plt.gca().set_aspect(len(total_i[0])/len(total_i))
+
+        # Draw horizontal lines on the grid
+        num_lines = len(total_i)-1 # Number of lines to draw
+
+        for i in range(0, num_lines + 1):
+            y = i +0.5
+            plt.axhline(y=y, color='black', linewidth=0.5)
+
+        plt.xlabel('Time step')
+        plt.ylabel('Initially infected device')
+
+        # Set custom ticks for the x-axis
+        x_ticks = [x*100 for x in range(self.t_steps_fixed+1)]  # Custom tick positions
+        x_labels = [x for x in range(self.t_steps_fixed+1)] # Custom tick labels
+        plt.xticks(x_ticks, x_labels)
+        
+        plt.title('Evolution of total infected nodes by initially infeted device')
         plt.close()
         return fig
