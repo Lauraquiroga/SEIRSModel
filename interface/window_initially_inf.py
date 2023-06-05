@@ -9,22 +9,28 @@ class InitInfectionWindow:
         self.win = win
         self.win.grab_set()
         self.win.focus_set()
-        self.win.title('Initially infected')
+        self.win.title('Initial conditions')
         self.win.geometry("1000x700")
         self.win.resizable(0,0)
         self.network:Network = self.master.network
         self.rates = rates
 
-        self.lbl_init_network = tk.Label(win, text='Select initially infected device:')
+        self.lbl_init_network = tk.Label(win, text='Run model for each network node')
         self.lbl_init_network.place(x=20, y=20)
+
+        self.btn_choose = tk.Button(master=self.win, text='Go!', command=self.run_heat_map)
+        self.btn_choose.place(x=20, y=45)
+
+        self.lbl_init_network = tk.Label(win, text='Or select initially infected node:')
+        self.lbl_init_network.place(x=20, y=100)
 
         nodes = [x for x in range(self.network.n)]
         self.cb_nodes=Combobox(win, values=nodes, state="readonly", width=10)
         self.cb_nodes.current(0)
-        self.cb_nodes.place(x=20, y=40)
+        self.cb_nodes.place(x=20, y=125)
 
         self.btn_choose = tk.Button(master=self.win, text='Select', command=self.choose_node)
-        self.btn_choose.place(x=20, y=70)
+        self.btn_choose.place(x=120, y=122)
 
         # Display graph
         self.show_graph()
@@ -46,3 +52,6 @@ class InitInfectionWindow:
                               self.rates[2],
                               self.rates[3])
         self.win.destroy()
+
+    def run_heat_map(self):
+        pass
