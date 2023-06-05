@@ -139,12 +139,52 @@ class SEIRS_Model:
             # Advance iteration
             k+=1
 
-    def run_model_fe_node(self):
+    def run_model_fe_node(self)->None:
         """
         Executes the model simulation for each (fe) node in the network
         for a fixed number of iterations
         """
+        # t_steps_fixed := total number of time_steps to be executed for every node
         self.t_steps_fixed = 15
+        # n_times := total number of iterations to be executed for every node (100 per time step)
+        n_times = self.t_steps_fixed*100
+        # total_infected := total number of nodes in I compartment for heatmap creation
+        self.total_infected = np.zeros((self.n, n_times)) 
+
+        for node in range(self.n):
+            # Each is a matrix of n x # of time-steps
+            x = np.zeros((self.n, n_times)) 
+            x[:,0]=np.ones(self.n)# all nodes start in susceptible state
+            w = np.zeros((self.n, n_times))
+            y = np.zeros((self.n, n_times))
+            z = np.zeros((self.n, n_times))
+            x[node,0] = 0
+            y[node, 0] = 1  # 4th node has the virus initially
+
+            # Definition of time-steps to calculate the ODE
+            min_t=0.0
+            max_t=n_times/100
+            t = np.linspace(min_t, max_t, n_times)
+            dt = t[1] - t[0]
+
+            # -------------------------------------------------------------------------------
+            # The arrays are filled in the for loop following the formula
+            # Numeric solution to the ODE using Euler's method
+            for k in range(1, n_times):
+                t[k] = t[k - 1] + dt
+                for i in range(self.n):
+                    z[i, k] = z[i, k - 1] + dt * self.z_prime(t[k - 1], w[:, k - 1], y[:, k - 1],  z[:, k - 1], i)
+                    w[i, k] = w[i, k - 1] + dt * self.w_prime(t[k - 1], w[:, k - 1], y[:, k - 1],  z[:, k - 1], i)
+                    y[i, k] = y[i, k - 1] + dt * self.y_prime(t[k - 1], w[:, k - 1], y[:, k - 1],  z[:, k - 1], i)
+                    x[i, k] = 1 - y[i, k] - z[i, k] - w[i, k]
+                    if (x[i, k]<0):
+                        x[i, k]=0
+                    #compartments = {0:'S', 1:'E', 2:'I',3:'R'}
+                    probabilities = [x[i, k], w[i, k], y[i, k], z[i, k]]
+                    compartment = probabilities.index(max(probabilities))
+                    if compartment==States.I.value:
+                        # Add total infected nodes to structure for comparisson
+                        self.total_infected[node][k]+=1
     
     # ----------------- Visualization of the model results ---------------------------
 
