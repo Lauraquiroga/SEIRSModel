@@ -9,7 +9,7 @@ class HeatmapWindow:
         self.results = results
         self.win.title('SEIRS Model Results')
         x = 800
-        y = 800
+        y = 750
         self.win.geometry(f"{x}x{y}")
         self.win.resizable(0,0)
 
@@ -22,12 +22,12 @@ class HeatmapWindow:
         self.btn_save = tk.Button(self.win,
                                           text = "Save model results",
                                           command = self.save_results)
-        self.btn_save.place(x=300, y=y-40)
+        self.btn_save.place(x=250, y=y-40)
 
         self.btn_restart = tk.Button(self.win,
                                           text = "Generate new model",
                                           command = self.restart)
-        self.btn_restart.place(x=440, y=y-40)
+        self.btn_restart.place(x=400, y=y-40)
 
         # Bind kill root to destroy event with close button
         self.win.protocol("WM_DELETE_WINDOW", self.kill_root)
@@ -42,7 +42,7 @@ class HeatmapWindow:
         toolbar = NavigationToolbar2Tk(canvas, self.win)
         toolbar.update()
         toolbar.place(x=400, y=20)
-        canvas.get_tk_widget().place(x=100, y=70)
+        canvas.get_tk_widget().place(x=50, y=70)
 
     def restart(self):
         """
@@ -57,3 +57,9 @@ class HeatmapWindow:
         """
         if self.master.win.winfo_exists():
             self.master.win.destroy()
+
+    def save_results(self):
+        """
+        Save the model results in a json file
+        """
+        pass

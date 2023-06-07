@@ -260,7 +260,7 @@ class SEIRS_Model:
         """
         matrix = np.asarray(self.total_infected, dtype=float)
 
-        fig = plt.figure(figsize=(6, 6))
+        fig = plt.figure(figsize=(7, 6))
 
         # Create the reversed "hot" colormap
         reversed_hot_cmap = plt.cm.hot_r
