@@ -147,40 +147,40 @@ class SEIRS_Model:
         # t_steps_fixed := total number of time_steps to be executed for every node
         self.t_steps_fixed = 15
         # n_times := total number of iterations to be executed for every node (100 per time step)
-        n_times = self.t_steps_fixed*100
+        self.n_times = self.t_steps_fixed*100
         # total_infected := total number of nodes in I compartment for heatmap creation
-        self.total_infected = np.zeros((self.n, n_times)) 
+        self.total_infected = np.zeros((self.n, self.n_times)) 
 
         for node in range(self.n):
             # Each is a matrix of n x # of time-steps
-            x = np.zeros((self.n, n_times)) 
-            x[:,0]=np.ones(self.n)# all nodes start in susceptible state
-            w = np.zeros((self.n, n_times))
-            y = np.zeros((self.n, n_times))
-            z = np.zeros((self.n, n_times))
-            x[node,0] = 0
-            y[node, 0] = 1  # 4th node has the virus initially
+            self.x = np.zeros((self.n, self.n_times)) 
+            self.x[:,0]=np.ones(self.n)# all nodes start in susceptible state
+            self.w = np.zeros((self.n, self.n_times))
+            self.y = np.zeros((self.n, self.n_times))
+            self.z = np.zeros((self.n, self.n_times))
+            self.x[node,0] = 0
+            self.y[node, 0] = 1  # 4th node has the virus initially
 
             # Definition of time-steps to calculate the ODE
             min_t=0.0
-            max_t=n_times/100
-            t = np.linspace(min_t, max_t, n_times)
+            max_t=self.n_times/100
+            t = np.linspace(min_t, max_t, self.n_times)
             dt = t[1] - t[0]
 
             # -------------------------------------------------------------------------------
             # The arrays are filled in the for loop following the formula
             # Numeric solution to the ODE using Euler's method
-            for k in range(1, n_times):
+            for k in range(1, self.n_times):
                 t[k] = t[k - 1] + dt
                 for i in range(self.n):
-                    z[i, k] = z[i, k - 1] + dt * self.z_prime(t[k - 1], w[:, k - 1], y[:, k - 1],  z[:, k - 1], i)
-                    w[i, k] = w[i, k - 1] + dt * self.w_prime(t[k - 1], w[:, k - 1], y[:, k - 1],  z[:, k - 1], i)
-                    y[i, k] = y[i, k - 1] + dt * self.y_prime(t[k - 1], w[:, k - 1], y[:, k - 1],  z[:, k - 1], i)
-                    x[i, k] = 1 - y[i, k] - z[i, k] - w[i, k]
-                    if (x[i, k]<0):
-                        x[i, k]=0
+                    self.w[i, k] = self.w[i, k - 1] + dt * self.w_prime( self.w[:, k - 1], self.y[:, k - 1],  self.z[:, k - 1], i)
+                    self.y[i, k] = self.y[i, k - 1] + dt * self.y_prime( self.w[:, k - 1], self.y[:, k - 1],  i)
+                    self.z[i, k] = self.z[i, k - 1] + dt * self.z_prime( self.y[:, k - 1], self.z[:, k - 1], i)
+                    self.x[i, k] = 1 - self.y[i, k] - self.z[i, k] - self.w[i, k]
+                    if (self.x[i, k]<0):
+                        self.x[i, k]=0
                     #compartments = {0:'S', 1:'E', 2:'I',3:'R'}
-                    probabilities = [x[i, k], w[i, k], y[i, k], z[i, k]]
+                    probabilities = [self.x[i, k], self.w[i, k], self.y[i, k], self.z[i, k]]
                     compartment = probabilities.index(max(probabilities))
                     if compartment==States.I.value:
                         # Add total infected nodes to structure for comparisson
@@ -253,12 +253,12 @@ class SEIRS_Model:
         plt.close()
         return fig
     
-    def show_heatmap(self, total_i):
+    def show_heatmap(self):
         """
         Plot the heatmap with the evolution of the total amount of infected devices
         by initially infected node
         """
-        matrix = np.asarray(total_i, dtype=float)
+        matrix = np.asarray(self.total_infected, dtype=float)
 
         fig = plt.figure(figsize=(6, 6))
 
@@ -268,10 +268,10 @@ class SEIRS_Model:
         
         cbar = plt.colorbar()
         cbar.set_label('Number of infected nodes')
-        plt.gca().set_aspect(len(total_i[0])/len(total_i))
+        plt.gca().set_aspect(len(self.total_infected[0])/len(self.total_infected))
 
         # Draw horizontal lines on the grid
-        num_lines = len(total_i)-1 # Number of lines to draw
+        num_lines = len(self.total_infected)-1 # Number of lines to draw
 
         for i in range(0, num_lines + 1):
             y = i +0.5

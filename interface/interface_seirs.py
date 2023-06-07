@@ -5,6 +5,7 @@ from window_n_net import NetSizeWindow
 from window_params import ModelParamsWindow
 from window_results import ResultsWindow
 from window_initially_inf import InitInfectionWindow
+from window_heatmap import HeatmapWindow
 from model.network import Network
 from model.seirs_model import SEIRS_Model
 
@@ -54,17 +55,26 @@ class InterfaceSEIRS:
         child_win = tk.Toplevel(self.win)
         InitInfectionWindow(child_win, self, rates)
 
-    def run_model(self, alpha, beta, delta, gamma):
+    def run_model(self, alpha, beta, delta, gamma, convergent):
         #rates:= dictionary with parameters
         rates = {'alpha': alpha, 'beta':beta, 'delta':delta, 'gamma':gamma}
         #initialize and run the model
         model = SEIRS_Model(self.network, rates)
-        model.run_model()
-        self.show_results(model)
+        if not convergent:
+            model.run_model()
+            self.show_results(model)
+        else:
+            model.run_model_fe_node()
+            self.show_heatmap(model)
 
     def show_results(self, model):
         child_win = tk.Toplevel(self.win)
         ResultsWindow(child_win, self, model)
+        self.win.withdraw()
+
+    def show_heatmap(self, model):
+        child_win = tk.Toplevel(self.win)
+        HeatmapWindow(child_win, self, model)
         self.win.withdraw()
 
 def main(): 

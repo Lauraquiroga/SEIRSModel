@@ -50,8 +50,14 @@ class InitInfectionWindow:
         self.master.run_model(self.rates[0],
                               self.rates[1],
                               self.rates[2],
-                              self.rates[3])
+                              self.rates[3],
+                              False)
         self.win.destroy()
 
     def run_heat_map(self):
-        pass
+        self.master.run_model(self.rates[0],
+                              self.rates[1],
+                              self.rates[2],
+                              self.rates[3],
+                              True)
+        self.win.destroy()
