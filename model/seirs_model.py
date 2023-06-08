@@ -139,13 +139,13 @@ class SEIRS_Model:
             # Advance iteration
             k+=1
 
-    def run_model_fe_node(self)->None:
+    def run_model_fe_node(self, time_steps)->None:
         """
         Executes the model simulation for each (fe) node in the network
         for a fixed number of iterations
         """
         # t_steps_fixed := total number of time_steps to be executed for every node
-        self.t_steps_fixed = 15
+        self.t_steps_fixed = time_steps
         # n_times := total number of iterations to be executed for every node (100 per time step)
         self.n_times = self.t_steps_fixed*100
         # total_infected := total number of nodes in I compartment for heatmap creation

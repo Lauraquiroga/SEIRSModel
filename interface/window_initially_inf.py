@@ -15,22 +15,30 @@ class InitInfectionWindow:
         self.network:Network = self.master.network
         self.rates = rates
 
-        self.lbl_init_network = tk.Label(win, text='Run model for each network node:')
-        self.lbl_init_network.place(x=20, y=20)
+        self.lbl_init_network = tk.Label(win, text='To run model varying\n initially infected device')
+        self.lbl_init_network.place(x=20, y=70)
+
+        self.lbl_init_network = tk.Label(win, text='Choose number of time-steps:')
+        self.lbl_init_network.place(x=20, y=110)
+
+        iterations = [x for x in range(1,31)]
+        self.cb_its=Combobox(win, values=iterations, state="readonly", width=10)
+        self.cb_its.current(14)
+        self.cb_its.place(x=20, y=130)
 
         self.btn_choose = tk.Button(master=self.win, text='Go!', command=self.run_heat_map)
-        self.btn_choose.place(x=20, y=45)
+        self.btn_choose.place(x=120, y=127)
 
         self.lbl_init_network = tk.Label(win, text='Or select initially infected node:')
-        self.lbl_init_network.place(x=20, y=100)
+        self.lbl_init_network.place(x=20, y=250)
 
         nodes = [x for x in range(self.network.n)]
         self.cb_nodes=Combobox(win, values=nodes, state="readonly", width=10)
         self.cb_nodes.current(0)
-        self.cb_nodes.place(x=20, y=125)
+        self.cb_nodes.place(x=20, y=280)
 
         self.btn_choose = tk.Button(master=self.win, text='Select', command=self.choose_node)
-        self.btn_choose.place(x=120, y=122)
+        self.btn_choose.place(x=120, y=277)
 
         # Display graph
         self.show_graph()
@@ -55,9 +63,10 @@ class InitInfectionWindow:
         self.win.destroy()
 
     def run_heat_map(self):
+        n_times = int(self.cb_its.get())
         self.master.run_model(self.rates[0],
                               self.rates[1],
                               self.rates[2],
                               self.rates[3],
-                              True)
+                              True, n_times)
         self.win.destroy()

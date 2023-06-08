@@ -55,7 +55,7 @@ class InterfaceSEIRS:
         child_win = tk.Toplevel(self.win)
         InitInfectionWindow(child_win, self, rates)
 
-    def run_model(self, alpha, beta, delta, gamma, convergent):
+    def run_model(self, alpha, beta, delta, gamma, convergent, n_times=0):
         #rates:= dictionary with parameters
         rates = {'alpha': alpha, 'beta':beta, 'delta':delta, 'gamma':gamma}
         #initialize and run the model
@@ -64,7 +64,7 @@ class InterfaceSEIRS:
             model.run_model()
             self.show_results(model)
         else:
-            model.run_model_fe_node()
+            model.run_model_fe_node(n_times)
             self.show_heatmap(model)
 
     def show_results(self, model):
