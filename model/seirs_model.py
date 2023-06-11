@@ -150,6 +150,8 @@ class SEIRS_Model:
         self.n_times = self.t_steps_fixed*100
         # total_infected := total number of nodes in I compartment when infection starts in the n node for heatmap creation
         self.total_infected = np.zeros((self.n, self.n_times)) 
+        # setting total number of initially infected devices
+        self.total_infected[0]=1
 
         for node in range(self.n):
             # Each is a matrix of n x # of time-steps
