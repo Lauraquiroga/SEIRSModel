@@ -1,8 +1,12 @@
 import json
+import os
+from datetime import datetime
 import tkinter as tk
+from tkinter import messagebox
 from tkinter.ttk import Combobox
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
 from model.seirs_model import SEIRS_Model
+from model.states import States
 
 class ResultsWindow:
     def __init__(self, win, master, results:SEIRS_Model):
@@ -164,8 +168,45 @@ class ResultsWindow:
         """
         Save the model results in a json file
         """
-        pass
-    
+        # Get the current datetime
+        current_datetime = datetime.now()
+        # Format the datetime as YYYYMMDDhhmmss
+        formatted_time = current_datetime.strftime("%Y%m%d%H%M%S")
+
+        #Create customized JSON structure
+        totals_list = self.results.totals.tolist()
+        prob_s = self.results.x.tolist()
+        prob_e = self.results.w.tolist()
+        prob_i = self.results.y.tolist()
+        prob_r = self.results.z.tolist()
+        probs=[]
+        for node in range(self.results.n):
+            probs.append({"node":node,
+                         "S": prob_s[node],
+                         "E": prob_e[node],
+                         "I": prob_i[node],
+                         "R": prob_r[node]})
+        output= {
+            "totals": {
+                "S": totals_list[States.S.value],
+                "E": totals_list[States.E.value],
+                "I": totals_list[States.I.value],
+                "R": totals_list[States.R.value]
+            },
+            "probabilities": probs
+        }
+
+        # Define the output file path
+        current_dir = (f"{os.getcwd()}\data\\results")
+        output_file = f"probs{self.results.n}n{self.results.rates['beta']}-{self.results.rates['alpha']}-{self.results.rates['delta']}-{self.results.rates['gamma']}rates{formatted_time}.json"
+        path = (f"{current_dir}\\{output_file}")
+
+        with open(path, "w") as file:
+            json.dump(output, file)
+
+        messagebox.showinfo(message=f"The model results have been saved in the '{output_file}' file in the data\\results folder", title="Saved")
+        self.btn_save["state"]="disabled"
+
     def restart(self):
         """
         Generate a new model
