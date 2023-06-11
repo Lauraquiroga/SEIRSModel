@@ -15,7 +15,7 @@ class InitInfectionWindow:
         self.network:Network = self.master.network
         self.rates = rates
 
-        self.lbl_init_network = tk.Label(win, text='To run the model varying the\ninitially infected device, choose the\nnumber of time-steps to consider:',
+        self.lbl_init_network = tk.Label(win, text='To run the model varying the\ninitially infected device, choose\nnumber of time-steps to consider:',
                                          justify='left')
         self.lbl_init_network.place(x=15, y=70)
 
@@ -36,7 +36,7 @@ class InitInfectionWindow:
         self.cb_nodes.place(x=20, y=310)
 
         self.btn_choose = tk.Button(master=self.win, text='Select', command=self.choose_node)
-        self.btn_choose.place(x=120, y=277)
+        self.btn_choose.place(x=120, y=307)
 
         # Display graph
         self.show_graph()

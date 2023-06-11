@@ -80,7 +80,7 @@ class HeatmapWindow:
             
         # Define the output file path
         current_dir = (f"{os.getcwd()}\data\\results")
-        output_file = f"totalI{self.results.n}n{self.results.t_steps_fixed}it{self.results.rates['beta']}-{self.results.rates['alpha']}-{self.results.rates['delta']}-{self.results.rates['gamma']}rates{formatted_time}.json"
+        output_file = f"totalI{self.results.n}n{self.results.t_steps_fixed}it{self.results.rates['beta']*100}-{self.results.rates['alpha']*100}-{self.results.rates['delta']*100}-{self.results.rates['gamma']*100}rates{formatted_time}.json"
         path = (f"{current_dir}\\{output_file}")
 
         with open(path, "w") as file:
