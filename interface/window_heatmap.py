@@ -1,4 +1,8 @@
+import json
+import os
+from datetime import datetime
 import tkinter as tk
+from tkinter import messagebox
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
 from model.seirs_model import SEIRS_Model
 
@@ -62,4 +66,25 @@ class HeatmapWindow:
         """
         Save the model results in a json file
         """
-        pass
+        # Get the current datetime
+        current_datetime = datetime.now()
+        # Format the datetime as YYYYMMDDhhmmss
+        formatted_time = current_datetime.strftime("%Y%m%d%H%M%S")
+
+        #Create customized JSON structure
+        totalI_list = self.results.total_infected.tolist()
+        output = []
+        for node in range(self.results.n):
+            output.append({"initially_infected": node, 
+                           "total_infected": totalI_list[node]})
+            
+        # Define the output file path
+        current_dir = (f"{os.getcwd()}\data\\results")
+        output_file = f"totalI{self.results.n}n{self.results.t_steps_fixed}it{self.results.rates['beta']}-{self.results.rates['alpha']}-{self.results.rates['delta']}-{self.results.rates['gamma']}rates{formatted_time}.json"
+        path = (f"{current_dir}\\{output_file}")
+
+        with open(path, "w") as file:
+            json.dump(output, file)
+
+        messagebox.showinfo(message=f"The model results have been saved in the '{output_file}' file in the data\\results folder", title="Saved")
+        self.btn_save["state"]="disabled"

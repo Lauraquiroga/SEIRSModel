@@ -1,3 +1,4 @@
+import json
 import tkinter as tk
 from tkinter.ttk import Combobox
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
