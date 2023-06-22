@@ -285,10 +285,14 @@ class SEIRS_Model:
         plt.ylabel('Initially infected device')
 
         # Set custom ticks for the x-axis
-        x_ticks = [x*100 for x in range(self.t_steps_fixed+1)]  # Custom tick positions
-        x_labels = [x for x in range(self.t_steps_fixed+1)] # Custom tick labels
+        if (self.t_steps_fixed<16):
+            x_ticks = [x*100 for x in range(self.t_steps_fixed+1)]  # Custom tick positions
+            x_labels = [x for x in range(self.t_steps_fixed+1)] # Custom tick labels
+        else:
+            x_ticks = [x*200 for x in range((self.t_steps_fixed//2)+1)]  # Custom tick positions
+            x_labels = [x*2 for x in range((self.t_steps_fixed//2)+1)] # Custom tick labels
+
         plt.xticks(x_ticks, x_labels)
-        
         plt.title('Evolution of total infected nodes by initially infeted device')
         plt.close()
         return fig
