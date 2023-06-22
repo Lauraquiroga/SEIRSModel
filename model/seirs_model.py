@@ -150,18 +150,20 @@ class SEIRS_Model:
         self.n_times = self.t_steps_fixed*100
         # total_infected := total number of nodes in I compartment when infection starts in the n node for heatmap creation
         self.total_infected = np.zeros((self.n, self.n_times)) 
-        # setting total number of initially infected devices
-        self.total_infected[0]=1
 
         for node in range(self.n):
+            # setting total number of initially infected devices
+            self.total_infected[node, 0]=1
             # Each is a matrix of n x # of time-steps
             self.x = np.zeros((self.n, self.n_times)) 
             self.x[:,0]=np.ones(self.n)# all nodes start in susceptible state
             self.w = np.zeros((self.n, self.n_times))
             self.y = np.zeros((self.n, self.n_times))
             self.z = np.zeros((self.n, self.n_times))
-            self.x[node,0] = 0
-            self.y[node, 0] = 1  # 4th node has the virus initially
+
+            # initiallt infected node starts in the I compartment:
+            self.x[node,0] = 0  
+            self.y[node, 0] = 1  
 
             # Definition of time-steps to calculate the ODE
             min_t=0.0
