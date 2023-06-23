@@ -89,8 +89,6 @@ class SEIRS_Model:
         for i in range(self.n):
             # Add initial setup for visualization
             comp_dict[i] = self.define_compartment(i,0)
-            # Set initial total devices per compartment
-            self.totals[comp_dict[i],0]+=1
         self.nodes_comp.append(comp_dict)
         
         # The arrays are filled in the while loop following the formula
