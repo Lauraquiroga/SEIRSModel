@@ -1,4 +1,4 @@
-# SEIRSModel
+# SEIRS-NIMFA Model for Infectious Disease Dynamics
 Laura Quiroga
 
 
