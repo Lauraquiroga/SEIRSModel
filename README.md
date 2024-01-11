@@ -36,7 +36,7 @@ Follow these steps to run the SEIRSModel project:
    pip install -r requirements.txt
    ```
    Ensure that you have Python installed on your system.    
-3. **Configuration**
+3. **Configure**
    
    Modify or add initial configuration files for your scenarios. These might be found in the data folder.
    
