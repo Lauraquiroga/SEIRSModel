@@ -18,7 +18,8 @@ Here x<sub>i</sub>(t), w<sub>i</sub>(t), y<sub>i</sub>(t), and z<sub>i</sub>(t) 
 │ ├── model/ # Folder containing Python files for the logic of the simulation     
 │ │ ├── network.py # Network class: IoT device network construction     
 │ │ ├── seirs_model.py # NIMFA SEIRS model for a homogeneous network with constant parameters     
-│ │ └── states.py # Enumeration for the states definition     
+│ │ └── states.py # Enumeration for the states definition  
+│ ├── interface_seirs.py # File containing main Python script     
 │ ├── .gitignore # Gitignore file     
 │ ├── README.md # Project README file     
 │ └── requirements.txt # Dependencies specification file  
