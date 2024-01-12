@@ -42,7 +42,7 @@ Follow these steps to run the SEIRSModel project:
    
 4. **Run the GUI**
    ```bash
-   python interface/interface_seirs.py     
+   python interface_seirs.py     
    ```
    Follow the steps indicated in the GUI according to your requirements.
      
