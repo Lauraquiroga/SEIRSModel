@@ -171,7 +171,7 @@ class ModelParamsWindow:
     def slider_changed(self, value, label):
         label.configure(text='{: .2f}'.format(float(value)))
 
-def load_image(self, name, size):
+    def load_image(self, name, size):
         """
         Load and resize image from assets
         """
