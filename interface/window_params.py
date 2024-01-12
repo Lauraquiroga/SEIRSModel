@@ -171,11 +171,11 @@ class ModelParamsWindow:
     def slider_changed(self, value, label):
         label.configure(text='{: .2f}'.format(float(value)))
 
-    def load_image(self, name, size):
+def load_image(self, name, size):
         """
         Load and resize image from assets
         """
-        current_dir = os.getcwd()+r"\assets"
-        image_path = (f"{current_dir}\{name}")
+        current_dir = os.getcwd()
+        image_path = os.path.join(current_dir, 'assets', f"{name}")
         image = Image.open(image_path)
         return ImageTk.PhotoImage(image.resize(size))

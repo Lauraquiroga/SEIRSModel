@@ -1,11 +1,11 @@
 import tkinter as tk
 from tkinter import messagebox
-from window_file_name import FileNameWindow
-from window_n_net import NetSizeWindow
-from window_params import ModelParamsWindow
-from window_results import ResultsWindow
-from window_initially_inf import InitInfectionWindow
-from window_heatmap import HeatmapWindow
+from interface.window_file_name import FileNameWindow
+from interface.window_n_net import NetSizeWindow
+from interface.window_params import ModelParamsWindow
+from interface.window_results import ResultsWindow
+from interface.window_initially_inf import InitInfectionWindow
+from interface.window_heatmap import HeatmapWindow
 from model.network import Network
 from model.seirs_model import SEIRS_Model
 
