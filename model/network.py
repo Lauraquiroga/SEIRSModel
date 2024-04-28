@@ -53,7 +53,7 @@ class Network:
             mess = str(fnf).split('] ', 1)[1]
             raise FileNotFoundError(mess)
         except Exception as e:
-            raise Exception(f"Unable to parse te json file {file_name}")
+            raise Exception(f"Unable to parse the json file {file_name}")
 
     def load_struc_from_json(self, file_name):
         """
@@ -73,7 +73,7 @@ class Network:
             mess = str(fnf).split('] ', 1)[1]
             raise FileNotFoundError(mess)
         except Exception as e:
-            raise Exception(f"Unable to parse te json file {file_name}")
+            raise Exception(f"Unable to parse the json file {file_name}")
 
     def generate_random(self, net_size, density):
         """
