@@ -112,8 +112,10 @@ class Network:
         remaining_edges = num_edges - (self.n - 1)
 
         while remaining_edges > 0:
-            i = np.random.randint(0, self.n-1)
-            j = np.random.randint(i+1, self.n)
+            i = np.random.randint(0, self.n)
+            j = i
+            while j==i:
+                j = np.random.randint(0,self.n)
             
             if self.adjMatrix[i, j] == 0:
                 self.adjMatrix[i, j] = 1
