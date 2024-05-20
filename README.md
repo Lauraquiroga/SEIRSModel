@@ -13,7 +13,9 @@ Here x<sub>i</sub>(t), w<sub>i</sub>(t), y<sub>i</sub>(t), and z<sub>i</sub>(t) 
 ├── SEIRSModel/ # Root directory    
 │ ├── assets/ # Folder containing images, diagrams, or other assets   
 │ ├── data/ # Folder containing sample initial configurations     
-│ │ ├── results/ # Folder where results of the simulation are dynamically saved     
+│ │ ├── results/ # Folder where results of the simulation are dynamically saved
+│ │ ├── test_case_examples/ # Folder with network configurations in the form of adjacency matrices used for the test cases from the article
+│ ├── independent_scripts/ # Folder containing scripts to run code without GUI
 │ ├── interface/ # Folder containing Python files for the GUI     
 │ ├── model/ # Folder containing Python files for the logic of the simulation     
 │ │ ├── network.py # Network class: IoT device network construction     
@@ -33,6 +35,7 @@ Follow these steps to run the SEIRSModel project:
    cd SEIRSModel
    ```
 2. **Install Dependencies**    
+   Create and activate a virtual environment. Install requirements mentioned in the requirements.txt file.
    ```bash
    pip install -r requirements.txt
    ```
